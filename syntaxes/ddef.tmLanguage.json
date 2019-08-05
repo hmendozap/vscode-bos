@@ -1,0 +1,320 @@
+{
+  "comment": "DDef highlight",
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "fileTypes": ["ddef"],
+  "foldingStartMarker": "(\\{|^\\s*<?%?\\s*'?\\s*(?:(Sub|Function|If|While|For|Do|Foreach|Begin|Using|Try|Catch|Finally))\\s*.*$)",
+  "foldingStopMarker": "(\\}|^\\s*<?%?\\s*\\s*'?\\s*(?:(End|Next|While)\\s*.*$)",
+  "name": "ddef",
+  "patterns": [
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#directives"
+    },
+    {
+      "include": "#declarations"
+    }
+  ],
+  "repository": {
+    "directives": {
+      "patterns": [
+        {
+          "include": "#import-directive"
+        },
+        {
+          "include": "#extends-directive"
+        },
+        {
+          "include": "#attribute-section"
+        }
+      ]
+    },
+    "declarations": {
+      "patterns": [
+        {
+          "include": "#type-declarations"
+        }
+      ]
+    },
+    "import-directive": {
+      "patterns": [
+        {
+          "begin": "\\b(Import)\\s+",
+          "beginCaptures": {
+            "1": { "name": "keyword.other.import.ddef" }
+          },
+          "end": "($)",
+          "patterns": [
+            {
+              "include": "#comment"
+            },
+            {
+              "name": "entity.name.type.namespace.ddef",
+              "match": "@?[_[:alpha:]][_[:alnum:]]*"
+            }
+          ]
+        }
+      ]
+    },
+    "extends-directive": {
+      "patterns": [
+        {
+          "begin": "\\b(Extends)\\s+",
+          "beginCaptures": {
+            "1": { "name": "keyword.other.extends.ddef" }
+          },
+          "end": "($)",
+          "patterns": [
+            {
+              "include": "#comment"
+            },
+            {
+              "name": "entity.name.type.namespace.ddef",
+              "match": "@?[_[:alpha:]][_[:alnum:]]*"
+            }
+          ]
+        }
+      ]
+    },
+    "type-declarations": {
+      "patterns": [
+        {
+          "include": "#comment"
+        },
+        {
+          "include": "#table-declaration"
+        },
+        {
+          "include": "#view-declaration"
+        },
+        {
+          "include": "#relation-declaration"
+        }
+      ]
+    },
+    "table-declaration": {
+      "patterns": [{
+          "begin": "(?=\\bTable\\b)",
+          "end": "(?<=End\\sTable)",
+          "patterns": [
+            {
+              "begin": "(?x)\n\\b(Table)\\b\\s+\n(@?[_[:alpha:]][_[:alnum:]]*)\\s*",
+              "beginCaptures": {
+                "1": { "name": "keyword.other.table.bos" },
+                "2": { "name": "entity.name.type.table.bos" }
+              },
+              "end": "(?=$)",
+              "patterns": [{
+                  "include": "#comment"
+                }]
+            },
+            {
+              "include": "#table-block"
+            },
+            {
+              "include": "#comment"
+            }
+          ]
+        }]
+    },
+    "table-block": {
+      "name": "meta.table.bos",
+      "begin": "($)",
+      "beginCaptures": {
+        "1": { "name": "punctuation.control.space.bos" }
+      },
+      "end": "\\b(End\\sTable$)\\b",
+      "endCaptures": {
+        "1": { "name": "keyword.control.end.bos" }
+      },
+      "patterns": [
+        {
+          "include": "#table-members"
+        }
+      ]
+    },
+    "lazyload-declaration": {
+      "name": "meta.lazyload.bos",
+      "begin": "\\b(LazyLoad)\\b(?=$)",
+      "beginCaptures": {
+        "1": { "name": "keyword.other.lazyload.bos" }
+      },
+      "end": "\\b(End\\sLazyLoad)\\b",
+      "endCaptures": {
+        "1": { "name": "keyword.control.end.bos" }
+      },
+      "contentName": "meta.embedded.block.sql",
+      "patterns": [
+        {
+          "include": "source.sql"
+        },
+        {
+          "include": "#comment"
+        }
+      ]
+    },
+    "relation-declaration":{
+      "begin": "(?x)\n(?:\\b(Relation)\\b)\\s+\n(@?[_[:alpha:]][_[:alnum:]]*)\\s*(?=$)",
+        "beginCaptures": {
+          "1": { "name": "keyword.other.relation.bos" },
+          "2": { "name": "entity.name.type.relation.bos" }
+        },
+      "end": "(?<=End\\sRelation)",
+      "patterns": [
+        {
+          "begin": "($)",
+          "beginCaptures": {
+            "1": { "name": "punctuation.control.space.bos" }
+          },
+          "end": "\\b(End\\sRelation$)\\b",
+          "endCaptures": {
+            "1": { "name": "keyword.control.end.bos" }
+          },
+          "contentName": "meta.embedded.block.sql",
+          "patterns": [{
+              "include": "source.sql"
+            }]
+        }
+      ]
+    },
+    "view-declaration": {
+      "begin": "(?=\\bView\\b)",
+      "end": "(?<=End\\sView)",
+      "patterns": [
+        {
+          "begin": "(?x)\n\\b(View)\\b\\s+\n(@?[_[:alpha:]][_[:alnum:]]*)\\s*",
+          "beginCaptures": {
+            "1": { "name": "keyword.other.view.bos" },
+            "2": { "name": "entity.name.type.view.bos" }
+          },
+          "end": "(?=$)",
+          "patterns": [
+            {
+              "include": "#comment"
+            }
+          ]
+        },
+        {
+          "begin": "($)",
+          "beginCaptures": {
+            "1": { "name": "punctuation.control.space.bos" }
+          },
+          "end": "\\b(End\\sView$)\\b",
+          "endCaptures": {
+            "1": { "name": "keyword.control.end.bos" }
+          },
+          "contentName": "meta.embedded.block.sql",
+          "patterns": [
+            {
+              "include": "source.sql"
+            },
+            {
+            "include": "#table-properties"
+          }]
+        }
+      ]
+    },
+    "table-members": {
+      "patterns": [
+        {
+          "include": "#comment"
+        },
+        {
+          "include": "#lazyload-declaration"
+        },
+        {
+          "include": "#table-properties"
+        }
+      ]
+    },
+    "table-properties": {
+      "patterns": [
+        {
+          "include": "#table-keys"
+        },
+        {
+          "include": "#table-save"
+        }
+      ]
+    },
+    "table-filter":{ },
+    "table-entity":{ },
+    "table-number": { },
+    "table-keys": {
+      "begin": "(?x)\n(?:(\\bUniqueKey|Key|LazyLoadKey|LockColumn)\\b)\\s+(=)\\s+",
+      "beginCaptures": {
+        "1": { "name": "keyword.other.key.bos" },
+        "2": { "name": "keyword.operator.assignment.bos" }
+      },
+      "end": "($)",
+      "patterns": [
+        {
+          "comment": "Here the identification must be improved",
+          "include": "#identifier"
+        },
+        {
+          "include": "#punctuation-comma"
+        },
+        {
+          "include": "#comment"
+        }
+      ]
+    },
+    "table-save": {
+      "match": "(?x)\n(?:\\b(ShouldSave|ReadOnly|CascadeDelete|CascadeUpdate|CanGroup)\\b\\s+)(=)(?:\\s+(\\bTrue\\b|\\bFalse\\b)$)",
+      "captures": {
+        "1": { "name": "keyword.other.save.bos" },
+        "2": { "name": "keyword.operator.assignment.bos" },
+        "3": { "name": "constant.language.boolean.literal.bos" }
+      }
+    },
+    "view-lock":{ },
+    "identifier": {
+      "name": "variable.other.readwrite.bos",
+      "match": "@?[_[:alpha:]][_[:alnum:]]*"
+    },
+    "punctuation-comma": {
+      "name": "punctuation.separator.comma.bos",
+      "match": ","
+    },
+    "comment": {
+      "patterns": [
+        {
+          "name": "comment.block.bos",
+          "begin": "/\\*",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.comment.bos" }
+          },
+          "end": "\\*/",
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.comment.bos" }
+          }
+        },
+        {
+          "begin": "(^\\s+)?(?=//)",
+          "beginCaptures": {
+            "1": { "name": "punctuation.whitespace.comment.leading.bos" }
+          },
+          "end": "(?=$)",
+          "patterns": [
+            {
+              "name": "comment.block.documentation.bos"
+            },
+            {
+              "name": "comment.line.double-dash.bos",
+              "begin": "(?<!/)//(?:(?!/)|(?=//))",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.comment.bos"
+                }
+              },
+              "end": "(?=$)"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "scopeName": "source.ddef"
+}

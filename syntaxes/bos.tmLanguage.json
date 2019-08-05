@@ -1,0 +1,1813 @@
+{
+    "comment": "BOS file syntax highlighting for SoftBauWare script language",
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "fileTypes": ["bos"],
+    "foldingStartMarker":
+      "(\\{|^\\s*<?%?\\s*'?\\s*(?:(Sub|Function|If|While|For|Do|Foreach|Begin|Using|Try|Catch|Finally))\\s*.*$)",
+    "foldingStopMarker":
+      "(\\}|^\\s*<?%?\\s*\\s*'?\\s*(?:(End|Next|While)\\s*.*$)",
+    "name": "bos",
+    "patterns": [
+        {
+            "include": "#comment"
+        },
+        {
+            "include": "#directives"
+        },
+        {
+            "include": "#declarations"
+        },
+        { 
+            "include": "#keywords"
+        },
+        {
+            "include": "#script-top-level"
+        }
+    ],
+    "repository": {
+        "directives": {
+            "patterns": [
+                {
+                    "include": "#import-directive"
+                },
+                {
+                    "include": "#attribute-section"
+                }
+            ]
+        },
+        "declarations": {
+            "patterns": [
+                {
+                    "include": "#namespace-declaration"
+                },
+                {
+                    "include": "#type-declarations" 
+                }
+            ]
+        },
+        "script-top-level": {
+            "patterns": [
+                {
+                    "include": "#method-declaration"
+                },
+                {
+                    "include": "#statement"
+                }
+            ]
+        },
+        "keywords": {
+            "patterns": [{
+                "name": "keyword.control.bos",
+                "match": "(?:\\b(If|Then|Else|ElseIf|Else If|End If|While|When|For|Foreach|Try|Catch|Finally|To|Each|In|Step|Case|Select|End Select|Return|Continue|Do|Until|Loop|Next|With|End With|Exit Do|Exit For|Exit Function|Exit Property|Exit Sub|IIf)\\b)"
+            }]
+        },
+        "strings": {
+            "name": "string.quoted.double.bos",
+            "begin": "\"",
+            "end": "\"",
+            "patterns": [
+                {
+                    "name": "constant.character.escape.bos",
+                    "match": "\\\\."
+                }
+            ]
+        },
+        "type-declarations": {
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#storage-modifier"
+                },
+                {
+                    "include": "#class-declaration"
+                },
+                {
+                    "include": "#delegate-declaration"
+                },
+                {
+                    "include": "#enum-declaration"
+                },
+                {
+                    "include": "#interface-declaration"
+                },
+                {
+                    "include": "#struct-declaration"
+                },
+                {
+                    "include": "#attribute-section"
+                }
+            ]
+        },
+        "class-or-struct-members": {
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#storage-modifier"
+                },
+                {
+                    "include": "#type-declarations"
+                },
+                {
+                    "include": "#property-declaration"
+                },
+                {
+                    "include": "#field-declaration"
+                },
+                {
+                    "include": "#event-declaration"
+                },
+                {
+                    "include": "#method-declaration"
+                },
+                {
+                    "include": "#attribute-section"
+                }
+            ]
+        },
+        "interface-members": {
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#property-declaration"
+                },
+                {
+                    "include": "#event-declaration"
+                },
+                {
+                    "include": "#indexer-declaration"
+                },
+                {
+                    "include": "#method-declaration"
+                },
+                {
+                    "include": "#attribute-section"
+                },
+                {
+                    "include": "#punctuation-semicolon"
+                }
+            ]
+        },
+        "statement":{
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#while-statement"
+                },
+                {
+                    "include": "#do-statement"
+                },
+                {
+                    "include": "#for-statement"
+                },
+                {
+                    "include": "#foreach-statement"
+                },
+                {
+                    "include": "#if-statement"
+                },
+                {
+                    "include": "#else-part"
+                },
+                {
+                    "include": "#return-statement"
+                },
+                {
+                    "include": "#select-statement"
+                },
+                {
+                    "include": "#goto-statement"
+                },
+                {
+                    "include": "#break-or-continue-statement"
+                },
+                {
+                    "include": "#throw-statement"
+                },
+                {
+                    "include": "#try-statement"
+                },
+                {
+                    "include": "#using-statement"
+                },
+                {
+                    "include": "#local-declaration"
+                },
+                {
+                    "include": "#expression"
+                }
+            ]
+        },
+        "expression": {
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#typeof-or-default-expression"
+                },
+                {
+                    "include": "#nameof-expression"
+                },
+                {
+                    "include": "#throw-expression"
+                },
+                {
+                    "include": "#this-or-base-expression"
+                },
+                {
+                    "include": "#conditional-operator"
+                },
+                {
+                    "include": "#expression-operators"
+                },
+                {
+                    "include": "#await-expression"
+                },
+                {
+                    "include": "#as-expression"
+                },
+                {
+                    "include": "#object-creation-expression"
+                },
+                {
+                    "include": "#array-creation-expression"
+                },
+                {
+                    "include": "#invocation-expression"
+                },
+                {
+                    "include": "#member-access-expression"
+                },
+                {
+                    "include": "#element-access-expression"
+                },
+                {
+                    "include": "#literal"
+                },
+                {
+                    "include": "#parenthesized-expression"
+                },
+                {
+                    "include": "#initializer-expression"
+                },
+                {
+                    "include": "#identifier"
+                }
+            ]
+        },
+        "import-directive":{
+            "patterns": [{
+                    "begin": "\\b(Import)\\s+",
+                    "beginCaptures": {
+                        "1":{ "name" : "keyword.other.import.bos"}
+                    },
+                    "end": "(?=$)",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "name": "entity.name.type.namespace.bos",
+                            "match": "@?[_[:alpha:]][_[:alnum:]]*"
+                        },
+                        {
+                            "include": "#operator-assignment"
+                        }
+                    ]
+            }]
+        },
+        "attribute-section": {
+            "patterns": [{
+                "begin": "(\\[)(Assembly|Event|Param|Property|Type)?(\\:)?",
+                "beginCaptures": {
+                    "1": {
+                        "name": "punctuation.squarebracket.open.bos"
+                    },
+                    "2": {
+                        "name": "keyword.other.attribute-specifier.bos"
+                    },
+                    "3": {
+                        "name": "punctuation.separator.colon.bos"
+                    }
+                },
+                "end":"(\\])",
+                "endCaptures": {
+                    "1": {
+                        "name": "punctuation.squarebracket.close.bos"
+                    }
+                },
+                "patterns": [
+                    {
+                        "include": "#comment"
+                    }
+                ]
+            }]
+        },
+        "namespace-declaration":{},
+        "storage-modifier": {
+            "patterns": [{
+                "name": "keyword.modifier.bos",
+                "match": "(?<!\\.)\\b(Public|Protected|Internal|Private|Abstract|Virtual|Override|Sealed|Static|Partial|Readonly|Volatile|Const|Extern)\\b"
+            }]
+        },
+        "class-declaration": {
+            "patterns": [{
+                "begin": "(?=\\bClass\\b)",
+                "end": "(?<=End\\sClass)",
+                "patterns": [
+                    {
+                        "begin": "(?x)\n\\b(Class)\\b\\s+\n(@?[_[:alpha:]][_[:alnum:]]*)\\s*",
+                        "beginCaptures": {
+                            "1": { "name": "keyword.other.class.bos" },
+                            "2": { "name": "entity.name.type.class.bos" }
+                        },
+                        "end": "(?=$)",
+                        "patterns": [
+                            {
+                                "include": "#comment"
+                            },
+                            {
+                                "include": "#type-parameter-list"
+                            },
+                            {
+                                "include": "#base-types"
+                            }
+                        ]
+                    },
+                    {
+                        "include": "#class-block"
+                    },
+                    {
+                        "include": "#comment"
+                    }
+                ]
+            }]
+        },
+        "delegate-declaration": {},
+        "enum-declaration": {
+            "begin": "(?=\\bEnum\\b)",
+            "end": "(?<=End Enum$)",
+            "patterns": [
+                {
+                    "begin": "(?=Enum)",
+                    "end": "(?=End Enum$)",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "match": "(Enum)\\s+(@?[_[:alpha:]][_[:alnum:]]*)",
+                            "captures": {
+                                "1": { "name": "keyword.other.enum.bos"},
+                                "2": { "name": "entity.name.type.enum.bos"}
+                            }
+
+                        },
+                        {
+                            "begin": "\\b(As)\\s+",
+                            "beginCaptures": {
+                               "0": { "name": "keyword.other.as.bos" } 
+                            },
+                            "end": "(?=$)",
+                            "patterns": [{ "include": "#type" }]
+                        }
+                    ]
+                },
+                {
+                    "include": "#comment"
+                }
+            ]
+        },
+        "interface-declaration": {
+            "name": "meta.interface.bos",
+            "begin": "(?=\\bInterface\\b)",
+            "end": "(?<=End\\sInterface$)",
+            "patterns": [
+                {
+                    "begin": "(?x)\n(Interface)\\b\\s+\n(@?[_[:alpha:]][_[:alnum:]]*)",
+                    "beginCaptures": {
+                        "1": { "name": "keyword.other.interface.bos" },
+                        "2": { "name": "entity.name.type.interface.bos" }
+                    },
+                    "end": "(?=$)",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#type-parameter-list"
+                        },
+                        {
+                            "include": "#base-types"
+                        }
+                    ]
+                },
+                {
+                    "include": "#interface-block"
+                },
+                {
+                    "include": "#comment"
+                }
+            ]
+        },
+        "struct-declaration": {
+            "begin": "(?=\\bStructure\\b)",
+            "end": "(?=End\\sStructure\\b$)",
+            "patterns": [
+                {
+                    "begin": "(?x)\n(Structure)\\b\\s+\n(@?[_[:alpha:]][_[:alnum:]]*)",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.other.struct.bos"
+                        },
+                        "2": {
+                            "name": "entity.name.type.struct.bos"
+                        }
+                    },
+                    "end": "(?=$)",
+                    "patterns": [
+                        {
+                            "include": "#comment"
+                        },
+                        {
+                            "include": "#type-parameter-list"
+                        },
+                        {
+                            "include": "#base-types"
+                        }
+                    ]
+                },
+                {
+                    "include": "#comment"
+                }
+            ]
+        },
+        "field-declaration": {
+            "begin":"(?x)\n (?:\\s*\n\\b(Dim)\\b\\s+)(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s* (?:\\b(As)\\b\\s+)(?<type-name>\n (?:\n (?:\n (?<name-and-type-args>\n (?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\n (?<type-args>\\s*<(?:[^<>]|\\g<type-args>)+>\\s*)?\n)\n (?:\\s*\\.\\s*\\g<name-and-type-args>)* \n)\n (?:\\s*\\?\\s*)? # nullable suffix?\n (?:\\s*\\[(?:\\s*,\\s*)*\\]\\s*)* # array suffix?\n)\n)\\s+\n(?=$)",
+            "beginCaptures": {
+                "1": { "name" : "keyword.other.dim.bos"},
+                "2": { "name" : "entity.name.variable.field.bos"},
+                "3": { "name" : "keyword.other.as.bos"},
+                "4": { "patterns": [ { "include": "#type" } ] }
+            },
+            "end" : "($)",
+            "patterns": []
+        },
+        "property-declaration": {
+            "name": "meta.prop.bos",
+            "begin": "(?x)\n \\s*\n \\b(Property)\\s+\n (\n[_[:alpha:]][_[:alnum:]]*)\\s*",
+            "beginCaptures": {
+                "1": { "name" : "keyword.other.property.bos" },
+                "2": { "name": "entity.name.variable.property.bos" }
+            },
+            "end": "(?<=End\\s\\1)",
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#property-accessors"
+                },
+                {
+                    "include": "#variable-initializer"
+                },
+                {
+                    "include": "#class-or-struct-members"
+                }
+            ]
+        },
+        "event-declaration": {
+            "match": "(?x)\n\\b(Event)\\b\\s*\n (?<return-type>\n (?<type-name>\n (?:\n (?:\n (?<name-and-type-args>\n (?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\n (?<type-args>\\s*<(?:[^<>]|\\g<type-args>)+>\\s*)?\n)\n (?:\\s*\\.\\s*\\g<name-and-type-args>)* \n)\n (?:\\s*\\?\\s*)? # nullable suffix?\n (?:\\s*\\[(?:\\s*,\\s*)*\\]\\s*)* # array suffix?\n)\n)\\s+\n)\n (?<interface-name>\\g<type-name>\\s*\\.\\s*)?\n (?<event-names>\\g<identifier>(?:\\s*,\\s*\\g<identifier>)*)\\s*\n (?=$)",
+            "captures": {
+                "1": { "name": "keyword.other.event.bos" },
+                "2": {
+                    "patterns": [ { "include": "#type" } ]
+                },
+                "7": {
+                    "patterns": [
+                        {
+                            "include": "#type"
+                        },
+                        {
+                            "include": "#punctuation-accessor"
+                        }
+                    ]
+                },
+                "8": {
+                    "patterns": [
+                        {
+                            "name": "entity.name.variable.event.bos",
+                            "match": "@?[_[:alpha:]][_[:alnum:]]*"
+                        },
+                        {
+                            "include": "#punctuation-comma"
+                        }
+                    ]
+                }
+            }
+        },
+        "property-accessors": {
+            "name": "meta.prop.accs.bos",
+            "begin": "($)",
+            "end":"(?<=End\\sProperty)",
+            "patterns": [
+                {
+                    "begin": "\\b(Get|Set)\\b",
+                    "beginCaptures": {
+                        "1": { "name": "keyword.other.GetSet.bos"}
+                    },
+                    "end": "\\b(End\\s\\1$)",
+                    "endCaptures": {
+                        "1": { "name": "keyword.other.end.bos"}
+                    },
+                    "patterns": [{
+                        "include": "#statement"
+                    }]
+                },
+                {
+                    "include": "#comment"
+                },
+                {
+                    "match": "\\b(End\\sProperty$)\\b",
+                    "name": "keyword.control.end.bos"
+                }
+            ]
+        },
+        "base-types" : {
+            "patterns": [{
+                    "begin": "(Extends)",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "keyword.other.extends.bos"
+                        }
+                    },
+                    "end": "(?=$)",
+                    "patterns": [
+                        {
+                            "include": "#type"
+                        },
+                        {
+                            "include": "#punctuation-comma"
+                        }
+                    ]
+            }]
+        },
+        "method-declaration": {
+            "patterns": [
+                {
+                    "include": "#sub-declaration"
+                },
+                {
+                    "include": "#function-declaration"
+                }
+            ]
+        },
+        "sub-declaration": {
+            "name": "",
+            "begin": "(?x)\n \\s*\n \\b(Sub)\\s+\n (\n [_[:alpha:]][_[:alnum:]]*)\\s* (?=\\()",
+            "beginCaptures": {
+                "1": { "name": "keyword.other.sub.bos" },
+                "2": { "name": "entity.name.sub.bos" }
+            },
+            "end": "(?<=End\\s\\1)",
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#parenthesized-parameter-list"
+                },
+                {
+                    "include": "#block"
+                }
+            ]
+        },
+        "function-declaration": {
+            "name": "meta.function.bos",
+            "begin": "(?x)\n \\s*\n \\b(Function)\\s+\n (\n [_[:alpha:]][_[:alnum:]]*)\\s* (?=\\()",
+            "beginCaptures": {
+                "1": { "name" : "keyword.other.function.bos" },
+                "2": { "name" : "entity.name.function.bos" }
+            },
+            "end": "(?<=End\\s\\1)",
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#parenthesized-parameter-list"
+                },
+                {
+                    "comment": "TODO: Review that end function works without anything inside the block",
+                    "include": "#as-expression"
+                },
+                {
+                    "include": "#block"
+                }
+            ]
+        },
+        "class-block":{
+            "name": "",
+            "begin": "($)",
+            "beginCaptures": {
+                "1": { "name": "punctuation.control.space.bos"}
+            },
+            "end": "\\b(End\\sClass$)\\b",
+            "endCaptures": {
+                "1": { "name": "keyword.control.end.bos" }
+            },
+            "patterns": [{
+                    "include": "#class-or-struct-members"
+                }]
+        },
+        "interface-block": {
+            "begin": "($)",
+            "beginCaptures": {
+                "1": { "name": "punctuation.control.space.bos"}
+            },
+            "end": "\\b(End\\sInterface$)",
+            "endCaptures": {
+                "1": { "name": "keyword.control.end.bos" }
+            },
+            "patterns": [
+                {
+                    "include": "#interface-members"
+                }
+            ]
+        },
+        "block": {
+            "name": "",
+            "begin": "($)",
+            "beginCaptures": {
+                "1": { "name": "punctuation.control.space.bos"}
+            },
+            "end": "\\b((End\\s(Sub|Function|If|Try|Using)$)|(Else))\\b",
+            "endCaptures": {
+                "1": { "name": "keyword.control.end.bos" }
+            },
+            "patterns": [{
+                    "include": "#statement"
+                }]
+        },
+        "catch-block":{
+            "name": "meta.catch.block.bos",
+            "begin": "($)",
+            "beginCaptures": {
+                "1": { "name": "punctuation.control.space.bos"}
+            },
+            "patterns": [{
+                    "include": "#statement"
+                }]
+        },
+        "variable-initializer": {
+            "begin": "(?<!=|!)(=)(?!=|>)",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.operator.assignment.bos"
+                }
+            },
+            "end": "(?=[,\\)\\]}\\n])",
+            "patterns": [
+                {
+                    "include": "#expression"
+                }
+            ]
+        },
+        "return-statement": {
+            "begin":"(?<!\\.)\\b(Return)\\b",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.control.flow.return.bos"
+                }
+            },
+            "end": "(?=[\\n|$])",
+            "patterns": [
+                {
+                    "include": "#expression"
+                }
+            ]
+        },
+        "do-statement":{
+            "begin":"(?<!\\.)\\b(Do)\\b",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.control.loop.do.bos"
+                }
+            },
+            "end": "(?<=Loop)",
+            "patterns": [
+                {
+                    "begin": "([\\n|$])",
+                    "end": "\\b(Loop)",
+                    "endCaptures": {
+                        "0": {
+                            "name": "keyword.control.loop.end.bos"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#statement"
+                        }
+                    ]
+                }
+            ]
+        },
+        "while-statement":{
+            "begin":"(?<!\\.)\\b(While)\\b\\s*",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.control.loop.while.bos"
+                }
+            },
+            "end": "(?<=End\\sWhile)",
+            "patterns": [
+                {
+                    "begin": "([\\n|$])",
+                    "end": "\\b(End\\sWhile)",
+                    "endCaptures": {
+                        "0": {
+                            "name": "keyword.control.loop.end.bos"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#statement"
+                        }
+                    ]
+                }
+            ]
+        },
+        "for-statement": {
+            "name": "meta.for.block.bos",
+            "begin":"(?<!\\.)\\b(For)\\b\\s*",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.control.loop.for.bos"
+                }
+            },
+            "end": "(?<=Next)",
+            "patterns": [
+                {
+                    "match": "\\b(To)\\b",
+                    "captures": {
+                        "1": { "name" : "keyword.control.loop.to.bos" }
+                    }
+                },
+                {
+                    "begin": "(?<=For\\s)",
+                    "beginCaptures": {
+                        "1": { "name": "punctuation.space.bos"}
+                    },
+                    "end": "(?=\\sTo)",
+                    "endCaptures": {
+                        "1": { "name": "punctuation.space.bos"}
+                    },
+                    "patterns": [{
+                            "include": "#expression"
+                        }]
+                },
+                {
+                    "begin": "($)",
+                    "end": "\\b(Next)\\b",
+                    "endCaptures": {
+                        "0": { "name": "keyword.control.loop.end.bos" }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#statement"
+                        }
+                    ]
+                }
+
+            ]
+        },
+        "foreach-statement": {
+            "name": "meta.foreach.bos",
+            "begin":"(?<!\\.)\\b(Foreach)\\b\\s*",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.control.loop.foreach.bos"
+                }
+            },
+            "end": "(?<=Next)",
+            "patterns": [
+                {
+                    "match": "(?x)\n(?<=Foreach\\s)(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s+\n\\b(In)\\b",
+                    "captures": {
+                        "1": { "name" : "entity.name.variable.local.bos" },
+                        "2": { "name" : "keyword.control.loop.in.bos" }
+                    }
+                },
+                {
+                    "include": "#expression"
+                },
+                {
+                    "begin": "($)",
+                    "end": "\\b(Next)\\b",
+                    "endCaptures": {
+                        "0": { "name": "keyword.control.loop.end.bos" }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#statement"
+                        }
+                    ]
+                }
+            ]
+        },
+        "if-statement": {
+            "name": "meta.if.bos",
+            "begin":"(?<!\\.)\\b(If)\\b\\s*",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.control.conditional.if.bos"
+                }
+            },
+            "end": "(?<=End\\s\\1)",
+            "patterns": [
+                {
+                    "match": "\\b(Then)\\b",
+                    "captures": {
+                        "1": { "name" : "keyword.control.conditional.then.bos" }
+                    }
+                },
+                {
+                    "begin": "(?<=If\\s)",
+                    "beginCaptures": {
+                        "1": { "name": "punctuation.space.bos"}
+                    },
+                    "end": "(?=\\sThen$)",
+                    "endCaptures": {
+                        "1": { "name": "punctuation.space.bos"}
+                    },
+                    "patterns": [{
+                            "include": "#expression"
+                        }]
+                },
+                {
+                    "begin": "([\\n|$])",
+                    "end": "\\b(End\\sIf$|(?:\\bElse\\b))\\b",
+                    "endCaptures": {
+                        "0": {
+                            "name": "keyword.control.conditional.end.bos"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#statement"
+                        }
+                    ]
+                }
+
+            ]
+        },
+        "else-part": {
+            "begin": "(?<!\\.)\\b(Else)\\b\\s*",
+            "beginCaptures": {
+                "1": { "name": "keyword.control.conditional.else.bos" }
+            },
+            "end": "\\b(End\\sIf)\\b",
+            "endCaptures": {
+                "1": { "name": "keyword.control.end.bos" }
+            },
+            "patterns": [
+                {
+                    "include": "#statement"
+                }
+            ]
+        },
+        "select-statement": {},
+        "break-or-continue-statement": {
+            "match": "(?<!\\.)\\b(?:(Break)|(Continue))\\b",
+            "captures": {
+                "1": {
+                    "name": "keyword.control.flow.break.bos"
+                },
+                "2": {
+                    "name": "keyword.control.flow.continue.bos"
+                }
+            }
+        },
+        "try-statement": {
+            "patterns": [
+                {
+                    "include": "#try-block"
+                },
+                {
+                    "include": "#catch-clause"
+                },
+                {
+                    "include": "#finally-clause"
+                }
+            ]
+        },
+        "try-block": {
+            "name": "meta.try.bos",
+            "begin": "(?<!\\.)\\b(Try)\\b",
+            "beginCaptures": {
+                "1": { "name": "keyword.control.try.bos" }
+            },
+            "end": "(?=(?:Catch))|(?=(?:Finally))",
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#statement"
+                }
+            ]
+        },
+        "finally-clause": {
+            "begin": "(?<!\\.)\\b(Finally)\\b",
+            "beginCaptures": {
+                "1": { "name": "keyword.control.try.finally.bos" }
+            },
+            "end": "(?<=End\\sTry)",
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#block"
+                }
+            ]
+        },
+        "catch-clause": {
+            "name": "meta.catch.bos",
+            "begin": "(?<!\\.)\\b(Catch)\\b",
+            "beginCaptures": {
+                "1": { "name": "keyword.control.try.catch.bos" }
+            },
+            "end": "(End\\sTry$)|(?=(?:Finally$))",
+            "endCaptures": {
+                "1":{ "name": "keyword.control.end.bos" }
+            },
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "name": "meta.catch.catch.bos",
+                    "begin": "(?x)\n(?<=Catch\\s)",
+                    "beginCaptures": {
+                        "0": { "name": "punctuation.parenthesis.open.bos" }
+                    },
+                    "end": "(?=$)",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.parenthesis.close.bos" }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#expression"
+                        }
+                    ]
+                },
+                {
+                    "include": "#statement"
+                }
+            ]
+        },
+        "throw-statement": {
+            "name": "meta.throw.bos",
+            "begin": "(?<!\\.)\\b(Throw)\\b",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.control.flow.throw.bos"
+                }
+            },
+            "end": "(?=[\\n|$])",
+            "patterns": [
+                {
+                    "include": "#expression"
+                }
+            ]
+        },
+        "using-statement": {
+            "name": "meta.using.bos",
+            "begin": "(?<!\\.)\\b(Using)\\b",
+            "beginCaptures": {
+                "1": { "name": "keyword.other.using.bos" }
+            },
+            "end": "(?<=End\\s\\1)",
+            "patterns": [
+                {
+                    "begin": "(?<=Using\\s)",
+                    "beginCaptures": {
+                        "1": { "name": "punctuation.space.bos"}
+                    },
+                    "end": "($)",
+                    "endCaptures": {
+                        "1": { "name": "punctuation.space.bos"}
+                    },
+                    "patterns": [
+                        {
+                            "include": "#local-variable-declaration"
+                        },
+                        {
+                            "include": "#expression"
+                        }
+                    ]
+                },
+                {
+                    "include": "#block"
+                }
+            ]
+        },
+        "local-declaration": {
+            "patterns": [
+                {
+                    "include": "#local-constant-declaration"
+                },
+                {
+                    "include": "#local-variable-declaration"
+                }
+            ]
+        },
+        "local-variable-declaration": {
+            "begin": "(?x)\n (?:\n (?:\\s*\n\\b(Dim)\\b\\s+) (?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s* (?:\\b(As)\\b\\s+) (?<type-name>\n (?:\n (?:\n (?<name-and-type-args>\n (?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\n (?<type-args>\\s*<(?:[^<>]|\\g<type-args>)+>\\s*)?\n)\n (?:\\s*\\.\\s*\\g<name-and-type-args>)* \n)\n (?:\\s*\\?\\s*)? # nullable suffix?\n (?:\\s*\\[(?:\\s*,\\s*)*\\]\\s*)* # array suffix?\n)\n)\\s+\n) | (?:\n (?:(\\bVar\\b))\n\\s+\n(@?[_[:alpha:]][_[:alnum:]]*)\\s*\n )",
+            "beginCaptures": {
+                "1": { "name": "keyword.other.dim.bos" },
+                "2": { "name": "entity.name.variable.local.bos" },
+                "3": { "name" : "keyword.other.as.bos"},
+                "4": { "patterns": [ { "include": "#type" } ] },
+                "8": { "name": "keyword.other.var.bos" },
+                "9": { "name": "entity.name.variable.local.bos" }
+            },
+            "end": "($)",
+            "patterns": [
+                {
+                    "include": "#punctuation-comma"
+                },
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#variable-initializer"
+                }
+            ]
+        },
+
+        "typeof-or-default-expression": {
+            "begin": "(?<!\\.)\\b(?:(typeof)|(default))\\b\\s*(\\()",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.other.typeof.bos"
+                },
+                "2": {
+                    "name": "keyword.other.default.bos"
+                },
+                "3": {
+                    "name": "punctuation.parenthesis.open.bos"
+                }
+            },
+            "end": "\\)",
+            "endCaptures": {
+                "0": {
+                    "name": "punctuation.parenthesis.close.bos"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#type"
+                }
+            ]
+        },
+        "nameof-expression": {
+            "begin": "(?<!\\.)\\b(nameof)\\b\\s*(\\()",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.other.nameof.bos"
+                },
+                "2": {
+                    "name": "punctuation.parenthesis.open.bos"
+                }
+            },
+            "end": "\\)",
+            "endCaptures": {
+                "0": {
+                    "name": "punctuation.parenthesis.close.bos"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#expression"
+                }
+            ]
+        },
+        "throw-expression": {
+            "match": "(?<!\\.)\\b(Throw)\\b",
+            "captures": {
+                "1": {
+                    "name": "keyword.control.flow.throw.bos"
+                }
+            }
+        },
+        "literal": {
+            "patterns": [
+                {
+                    "include": "#boolean-literal"
+                },
+                {
+                    "include": "#null-literal"
+                },
+                {
+                    "include": "#numeric-literal"
+                },
+                {
+                    "include": "#char-literal"
+                },
+                {
+                    "include": "#string-literal"
+                },
+                {
+                    "include": "#verbatim-string-literal"
+                }
+            ]
+        },
+        "boolean-literal": {
+            "patterns": [
+                {
+                    "name": "constant.language.boolean.true.bos",
+                    "match": "(?<!\\.)\\bTrue\\b"
+                },
+                {
+                    "name": "constant.language.boolean.false.bos",
+                    "match": "(?<!\\.)\\bFalse\\b"
+                }
+            ]
+        },
+        "null-literal": {
+            "name": "constant.language.null.bos",
+            "match": "(?<!\\.)\\bNull\\b"
+        },
+        "numeric-literal": {
+            "patterns": [
+                {
+                    "name": "constant.numeric.hex.bos",
+                    "match": "\\b0(x|X)[0-9a-fA-F_]+(U|u|L|l|UL|Ul|uL|ul|LU|Lu|lU|lu)?\\b"
+                },
+                {
+                    "name": "constant.numeric.binary.bos",
+                    "match": "\\b0(b|B)[01_]+(U|u|L|l|UL|Ul|uL|ul|LU|Lu|lU|lu)?\\b"
+                },
+                {
+                    "name": "constant.numeric.decimal.bos",
+                    "match": "\\b([0-9_]+)?\\.[0-9_]+((e|E)[0-9]+)?(F|f|D|d|M|m)?\\b"
+                },
+                {
+                    "name": "constant.numeric.decimal.bos",
+                    "match": "\\b[0-9_]+(e|E)[0-9_]+(F|f|D|d|M|m)?\\b"
+                },
+                {
+                    "name": "constant.numeric.decimal.bos",
+                    "match": "\\b[0-9_]+(F|f|D|d|M|m)\\b"
+                },
+                {
+                    "name": "constant.numeric.decimal.bos",
+                    "match": "\\b[0-9_]+(U|u|L|l|UL|Ul|uL|ul|LU|Lu|lU|lu)?\\b"
+                }
+            ]
+        },
+        "char-literal": {
+            "name": "string.quoted.single.bos",
+            "begin": "'",
+            "beginCaptures": {
+                "0": {
+                    "name": "punctuation.definition.char.begin.bos"
+                }
+            },
+            "end": "(\\')|((?:[^\\\\\\n])$)",
+            "endCaptures": {
+                "1": {
+                    "name": "punctuation.definition.char.end.bos"
+                },
+                "2": {
+                    "name": "invalid.illegal.newline.bos"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#string-character-escape"
+                }
+            ]
+        },
+        "string-literal": {
+            "name": "string.quoted.double.bos",
+            "begin": "(?<!@)\"",
+            "beginCaptures": {
+                "0": {
+                    "name": "punctuation.definition.string.begin.bos"
+                }
+            },
+            "end": "(\")|((?:[^\\\\\\n])$)",
+            "endCaptures": {
+                "1": {
+                    "name": "punctuation.definition.string.end.bos"
+                },
+                "2": {
+                    "name": "invalid.illegal.newline.bos"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#string-character-escape"
+                }
+            ]
+        },
+        "string-character-escape": {
+            "comment": "It escapes the newline separator and selects it with the end of line char",
+            "name": "constant.character.escape.bos",
+            "match": "\\\\."
+        },
+        "verbatim-string-literal": {
+            "name": "string.quoted.double.bos",
+            "begin": "@\"",
+            "beginCaptures": {
+                "0": {
+                    "name": "punctuation.definition.string.begin.bos"
+                }
+            },
+            "end": "\"(?=[^\"])",
+            "endCaptures": {
+                "0": {
+                    "name": "punctuation.definition.string.end.bos"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#verbatim-string-character-escape"
+                }
+            ]
+        },
+        "verbatim-string-character-escape": {
+            "name": "constant.character.escape.bos",
+            "match": "\"\""
+        },
+        "this-or-base-expression": {
+            "match": "\\b(?:(Base)|(This))\\b",
+            "captures": {
+                "1": {
+                    "name": "keyword.other.base.bos"
+                },
+                "2": {
+                    "name": "keyword.other.this.bos"
+                }
+            }
+        },
+        "conditional-operator": {
+            "begin": "(?<!\\?)\\?(?!\\?|\\.|\\[)",
+            "beginCaptures": {
+                "0": {
+                    "name": "keyword.operator.conditional.question-mark.bos"
+                }
+            },
+            "end": ":",
+            "endCaptures": {
+                "0": {
+                    "name": "keyword.operator.conditional.colon.bos"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#expression"
+                }
+            ]
+        },
+        "expression-operators": {
+            "patterns": [
+                {
+                    "name": "keyword.operator.assignment.compound.bos",
+                    "match": "\\*=|/=|%=|\\+=|-="
+                },
+                {
+                    "name": "keyword.operator.assignment.compound.bitwise.bos",
+                    "match": "\\&=|\\^=|<<=|>>=|\\|="
+                },
+                {
+                    "name": "keyword.operator.bitwise.shift.bos",
+                    "match": "<<|>>"
+                },
+                {
+                    "name": "keyword.operator.comparison.bos",
+                    "match": "==|!=",
+                    "disabled": 1
+                },
+                {
+                    "name": "keyword.operator.relational.bos",
+                    "match": "<=|>=|<|>"
+                },
+                {
+                    "name": "keyword.operator.logical.bos",
+                    "match": "\\!|&&|\\|\\|"
+                },
+                {
+                    "name": "keyword.operator.bitwise.bos",
+                    "match": "\\&|~|\\^|\\|"
+                },
+                {
+                    "name": "keyword.operator.assignment.bos",
+                    "match": "\\="
+                },
+                {
+                    "name": "keyword.operator.decrement.bos",
+                    "match": "--"
+                },
+                {
+                    "name": "keyword.operator.increment.bos",
+                    "match": "\\+\\+"
+                },
+                {
+                    "name": "keyword.operator.arithmetic.bos",
+                    "match": "%|\\*|/|-|\\+"
+                },
+                {
+                    "name": "keyword.operator.null-coalescing.bos",
+                    "match": "\\?\\?"
+                }
+            ]
+        },
+        
+        "as-expression": {
+            "match": "(?x)\n(?<!\\.)\\b(As)\\b\\s*\n(?<type-name>\n  (?:\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name-and-type-args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type-args>\\s*<(?:[^<>]|\\g<type-args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name-and-type-args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*\\?\\s*)? # nullable suffix?\n    (?:\\s*\\[(?:\\s*,\\s*)*\\]\\s*)* # array suffix?\n  )\n)?",
+            "captures": {
+                "1": {
+                    "name": "keyword.other.as.bos"
+                },
+                "2": {
+                    "patterns": [
+                        {
+                            "include": "#type"
+                        }
+                    ]
+                }
+            }
+        },
+
+        "declaration-expression-local": {
+            "match": "(?x)\n (?:\n \\b(Dim)\\b \n)\\s+\n(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\b\\s*\n(?=[,)\\]])",
+            "captures": {
+                "1": {
+                    "name": "keyword.other.dim.bos"
+                },
+                "2": {
+                    "patterns": [
+                        {
+                            "include": "#type"
+                        }
+                    ]
+                },
+                "7": {
+                    "name": "entity.name.variable.local.bos"
+                }
+            }
+        },
+        "object-creation-expression": {
+            "patterns": [
+                {
+                    "include": "#object-creation-expression-with-parameters"
+                },
+                {
+                    "include": "#object-creation-expression-with-no-parameters"
+                }
+            ]
+        },
+        "object-creation-expression-with-parameters": {
+            "begin": "(?x)\n(New)\\s+\n(?<type-name>\n  (?:\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name-and-type-args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type-args>\\s*<(?:[^<>]|\\g<type-args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name-and-type-args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*\\?\\s*)? # nullable suffix?\n    (?:\\s*\\[(?:\\s*,\\s*)*\\]\\s*)* # array suffix?\n  )\n)\\s*\n(?=\\()",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.other.new.bos"
+                },
+                "2": {
+                    "patterns": [
+                        {
+                            "include": "#type"
+                        }
+                    ]
+                }
+            },
+            "end": "(?<=\\))",
+            "patterns": [
+                {
+                    "include": "#argument-list"
+                }
+            ]
+        },
+        "object-creation-expression-with-no-parameters": {
+            "match": "(?x)\n(New)\\s+\n(?<type-name>\n  (?:\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name-and-type-args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type-args>\\s*<(?:[^<>]|\\g<type-args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name-and-type-args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*\\?\\s*)? # nullable suffix?\n    (?:\\s*\\[(?:\\s*,\\s*)*\\]\\s*)* # array suffix?\n  )\n)\\s*\n(?=\\{|$)",
+            "captures": {
+                "1": {
+                    "name": "keyword.other.new.bos"
+                },
+                "2": {
+                    "patterns": [ { "include": "#type" }
+                    ]
+                }
+            },
+            "patterns": [ ]
+        },
+        "array-creation-expression": {
+            "name": "meta.array.bos",
+            "begin": "(?x)\n\\b(New|Stackalloc)\\b\\s*\n(?<type-name>\n  (?:\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name-and-type-args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type-args>\\s*<(?:[^<>]|\\g<type-args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name-and-type-args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*\\?\\s*)? # nullable suffix?\n    (?:\\s*\\[(?:\\s*,\\s*)*\\]\\s*)* # array suffix?\n  )\n)?\\s*\n(?=\\[)",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.other.new.bos"
+                },
+                "2": {
+                    "patterns": [
+                        {
+                            "include": "#type"
+                        }
+                    ]
+                }
+            },
+            "end": "(?<=\\])",
+            "patterns": [
+                {
+                    "include": "#bracketed-argument-list"
+                }
+            ]
+        },
+        "invocation-expression": {
+            "begin": "(?x)\n(?:(\\?)\\s*)? # preceding null-conditional operator?\n(?:(\\.)\\s*)? # preceding dot?\n(@?[_[:alpha:]][_[:alnum:]]*)\\s* #method name\n(?<type-args>\\s*<([^<>]|\\g<type-args>)+>\\s*)?\\s* # type arguments\n(?=\\() # open paren of argument list",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.operator.null-conditional.bos"
+                },
+                "2": {
+                    "name": "punctuation.accessor.bos"
+                },
+                "3": {
+                    "name": "entity.name.function.bos"
+                },
+                "4": {
+                    "patterns": [
+                        {
+                            "include": "#type-arguments"
+                        }
+                    ]
+                }
+            },
+            "end": "(?<=\\))",
+            "patterns": [
+                {
+                    "include": "#argument-list"
+                }
+            ]
+        },
+        "member-access-expression": {
+            "patterns": [
+                {
+                    "match": "(?x)\n(?:(\\?)\\s*)? # preceding null-conditional operator?\n(\\.)\\s* # preceding dot\n(@?[_[:alpha:]][_[:alnum:]]*)\\s* # property name\n(?![_[:alnum:]]|\\(|(\\?)?\\[|<)  # next character is not alpha-numeric, nor a (, [, or <. Also, test for ?[",
+                    "captures": {
+                        "1": { "name": "keyword.operator.null-conditional.bos" },
+                        "2": { "name": "punctuation.accessor.bos" },
+                        "3": { "name": "variable.other.object.property.bos" }
+                    }
+                },
+                {
+                    "match": "(?x)\n(\\.)?\\s*\n(@?[_[:alpha:]][_[:alnum:]]*)\n(?<type-params>\\s*<([^<>]|\\g<type-params>)+>\\s*)\n(?=\n  (\\s*\\?)?\n  \\s*\\.\\s*@?[_[:alpha:]][_[:alnum:]]*\n)",
+                    "captures": {
+                        "1": {
+                            "name": "punctuation.accessor.bos"
+                        },
+                        "2": {
+                            "name": "variable.other.object.bos"
+                        },
+                        "3": {
+                            "patterns": [
+                                {
+                                    "include": "#type-arguments"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "match": "(?x)\n(@?[_[:alpha:]][_[:alnum:]]*)\n(?=\n  (\\s*\\?)?\n  \\s*\\.\\s*@?[_[:alpha:]][_[:alnum:]]*\n)",
+                    "captures": {
+                        "1": {
+                            "name": "variable.other.object.bos"
+                        }
+                    }
+                }
+            ]
+        },
+        "element-access-expression": {
+            "begin": "(?x)\n(?:(\\?)\\s*)? # preceding null-conditional operator?\n(?:(\\.)\\s*)? # preceding dot?\n(?:(@?[_[:alpha:]][_[:alnum:]]*)\\s*)? # property name\n(?:(\\?)\\s*)? # null-conditional operator?\n(?=\\[) # open bracket of argument list",
+            "beginCaptures": {
+                "1": { "name": "keyword.operator.null-conditional.bos" },
+                "2": { "name": "punctuation.accessor.bos" },
+                "3": { "name": "variable.other.object.property.bos" },
+                "4": { "name": "keyword.operator.null-conditional.bos" }
+            },
+            "end": "(?<=\\])(?!\\s*\\[)",
+            "patterns": [
+                {
+                    "include": "#bracketed-argument-list"
+                }
+            ]
+        },
+        "parenthesized-expression": {
+            "begin": "\\(",
+            "beginCaptures": {
+                "0": { "name": "punctuation.parenthesis.open.cs" }
+            },
+            "end": "\\)",
+            "endCaptures": {
+                "0": { "name": "punctuation.parenthesis.close.cs" }
+            },
+            "patterns": [
+                {
+                    "include": "#expression"
+                }
+            ]
+        },
+        "initializer-expression": {
+            "begin": "\\{",
+            "beginCaptures": {
+                "0": { "name": "punctuation.curlybrace.open.bos" }
+            },
+            "end": "\\}",
+            "endCaptures": {
+                "0": { "name": "punctuation.curlybrace.close.bos" }
+            },
+            "patterns": [
+                {
+                    "include": "#expression"
+                },
+                {
+                    "include": "#punctuation-comma"
+                }
+            ]
+        },
+        "identifier": {
+            "name": "variable.other.readwrite.bos",
+            "match": "@?[_[:alpha:]][_[:alnum:]]*"
+        },
+        "parenthesized-parameter-list": {
+            "begin": "(\\()",
+            "beginCaptures": {
+                "0": { "name": "punctuation.parenthesis.open.bos" }
+            },
+            "end": "(\\))",
+            "endCaptures": {
+                "0": { "name": "punctuation.parenthesis.close.bos" }
+            },
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#attribute-section"
+                },
+                {
+                    "include": "#parameter"
+                },
+                {
+                    "include": "#punctuation-comma"
+                }
+            ]
+        },
+        "parameter": {
+            "patterns": [{
+                "match": "(?x)\n (?:(?:\\b(ByRef|ByVal)\\b)\\s+)?\n(?:(@?[_[:alpha:]][_[:alnum:]]*)\\s+(?=As))\n(?:\\b(As)\\b)\\s+(?<type-name>\n (?:\n(?:(?<identifier> @?[_[:alpha:]][_[:alnum:]]*))\n (?<name-and-type-args> \n\\g<identifier>\n(?<type-args>\\s*<(?:[^<>]|\\g<type-args>)+>\\s*)?\n)\n(?:\\s*\\.\\s*\\g<name-and-type-args>)*) (?:\\s*\\[\\]\\s*)*\n)",
+                "captures": {
+                    "1": { "name": "storage.modifier.parameter.bos" },
+                    "2": { "name": "entity.name.variable.parameter.bos"},
+                    "3": { "name": "keyword.operator.as.bos"},
+                    "4": { "patterns" : [{ "include": "#type"}] }
+                }
+            }]
+        },
+        "argument-list": {
+            "begin": "\\(",
+            "beginCaptures": {
+                "0": {
+                    "name": "punctuation.parenthesis.open.bos"
+                }
+            },
+            "end": "\\)",
+            "endCaptures": {
+                "0": {
+                    "name": "punctuation.parenthesis.close.bos"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#argument"
+                },
+                {
+                    "include": "#punctuation-comma"
+                }
+            ]
+        },
+        "bracketed-argument-list": {
+            "begin": "\\[",
+            "beginCaptures": {
+                "0": {
+                    "name": "punctuation.squarebracket.open.bos"
+                }
+            },
+            "end": "\\]",
+            "endCaptures": {
+                "0": {
+                    "name": "punctuation.squarebracket.close.bos"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#named-argument"
+                },
+                {
+                    "include": "#argument"
+                },
+                {
+                    "include": "#punctuation-comma"
+                }
+            ]
+        },
+
+        "named-argument": {
+            "begin": "(@?[_[:alpha:]][_[:alnum:]]*)\\s*(:)",
+            "beginCaptures": {
+                "1": {
+                    "name": "entity.name.variable.parameter.bos"
+                },
+                "2": {
+                    "name": "punctuation.separator.colon.bos"
+                }
+            },
+            "end": "(?=(,|\\)|\\]))",
+            "patterns": [
+                {
+                    "include": "#argument"
+                }
+            ]
+        },
+        "argument": {
+            "patterns": [
+                {
+                    "name": "storage.modifier.bos",
+                    "match": "\\b(Ref|Out|In)\\b"
+                },
+                {
+                    "include": "#declaration-expression-local"
+                },
+                {
+                    "include": "#expression"
+                }
+            ]
+        },
+
+        "type": {
+            "name": "meta.type.bos",
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#type-builtin"
+                },
+                {
+                    "include": "#type-name"
+                },
+                {
+                    "include": "#type-arguments"
+                },
+                {
+                    "include": "#type-array-suffix"
+                }
+            ]
+        },
+        "type-builtin": {
+            "patterns": [{
+                "match": "\\b(Boolean|Byte|Char|Decimal|Double|Float|Int|Long|Object|Sbyte|Short|String|UInt|ULong|UShort|Void|Dynamic)\\b",
+                "captures": { "1": {"name": "keyword.type.bos"} }
+            }]
+        },
+        "type-name":{
+            "patterns": [
+                {
+                    "match": "(@?[_[:alpha:]][_[:alnum:]]*)\\s*(\\.)",
+                    "captures": {
+                        "1": {
+                            "name": "storage.type.cs"
+                        },
+                        "2": {
+                            "name": "punctuation.accessor.bos"
+                        }
+                    }
+                },
+                {
+                    "match": "(\\.)\\s*(@?[_[:alpha:]][_[:alnum:]]*)",
+                    "captures": {
+                        "1": {
+                            "name": "punctuation.accessor.bos"
+                        },
+                        "2": {
+                            "name": "storage.type.bos"
+                        }
+                    }
+                },
+                {
+                    "name": "storage.type.bos",
+                    "match": "@?[_[:alpha:]][_[:alnum:]]*"
+                }
+            ]
+        },
+        "type-arguments": {
+            "begin": "<",
+            "beginCaptures": {
+                "0": {
+                    "name": "punctuation.definition.typeparameters.begin.bos"
+                }
+            },
+            "end": ">",
+            "endCaptures": {
+                "0": {
+                    "name": "punctuation.definition.typeparameters.end.bos"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#comment"
+                },
+                {
+                    "include": "#type"
+                },
+                {
+                    "include": "#punctuation-comma"
+                }
+            ]
+        },
+        "type-array-suffix": {
+            "patterns": [{
+                    "begin": "\\[",
+                    "beginCaptures": {
+                        "0": { "name": "punctuation.squarebracket.open.bos" }
+                    },
+                    "end": "\\]",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.squarebracket.close.bos" }
+                    },
+                    "patterns": [{
+                        "include": "#punctuation-comma"
+                    }]
+            }]
+        },
+        "operator-assignment": {
+            "name": "keyword.operator.assignment.bos",
+            "match": "(?<!=|!)(=)(?!=)"
+        },
+        "punctuation-comma": {
+            "name": "punctuation.separator.comma.bos",
+            "match": ","
+        },
+        "comment": {
+            "patterns": [
+                {
+                    "name": "comment.block.bos",
+                    "begin": "/\\*",
+                    "beginCaptures": {
+                        "0": { "name": "punctuation.definition.comment.bos" }
+                    },
+                    "end": "\\*/",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.definition.comment.bos" }
+                    }
+                },
+                {
+                    "begin": "(^\\s+)?(?=//)",
+                    "beginCaptures": {
+                        "1": { "name": "punctuation.whitespace.comment.leading.bos"}
+                    },
+                    "end": "(?=$)",
+                    "patterns": [
+                        {
+                            "name": "comment.block.documentation.bos"
+                        },
+                        {
+                            "name":"comment.line.double-dash.bos",
+                            "begin": "(?<!/)//(?:(?!/)|(?=//))",
+                            "beginCaptures": {
+                                "0": {
+                                    "name": "punctuation.definition.comment.bos"
+                                }
+                            },
+                            "end": "(?=$)"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "scopeName": "source.bos"
+}
