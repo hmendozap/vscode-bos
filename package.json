@@ -1,105 +1,105 @@
 {
-				"name": "vscode-bos",
-				"displayName": "vscode-bos",
-				"description": "Simple extension for bos code suport",
-				"version": "0.0.1-rc",
-				"engines": {
-								"vscode": "^1.36.0"
-				},
-				"categories": [
-								"Programming Languages"
-				],
-				"activationEvents": [
-								"onLanguage:bos",
-								"onCommand:extension.helloWorld"
-				],
-				"main": "./out/extension.js",
-				"contributes": {
-								"configuration": {
-												"title": "Bos Configuration",
-												"properties": {
-																"maxProblems": {
-																				"scope": "resource",
-																				"type": "number",
-																				"default": 10,
-																				"description": "Controls maximum number of problems produced by server"
-																}
-												}
-								},
-								"commands": [
-												{
-																"command": "extension.helloWorld",
-																"title": "Hello World"
-												}
-								],
-								"languages": [
-												{
-																"id": "bos",
-																"aliases": [
-																				"bos",
-																				"BOS"
-																],
-																"extensions": [
-																				".bos"
-																],
-																"configuration": "./language-configuration.json"
-												},
-												{
-																"id": "ddef",
-																"aliases": [
-																				"ddef",
-																				"DDef"
-																],
-																"extensions": [
-																				".ddef"
-																],
-																"configuration": "./language-configuration.json"
-												}
-								],
-								"grammars": [
-												{
-																"language": "bos",
-																"scopeName": "source.bos",
-																"path": "./syntaxes/bos.tmLanguage.json"
-												},
-												{
-																"language": "ddef",
-																"scopeName": "source.ddef",
-																"path": "./syntaxes/ddef.tmLanguage.json",
-																"embeddedLanguages": {
-																				"meta.embedded.block.sql": "sql"
-																}
-												}
-								],
-								"snippets": [
-												{
-																"language": "bos",
-																"path": "./snippets/bos.json"
-												}
-								]
-				},
-				"scripts": {
-								"vscode:prepublish": "yarn run compile",
-								"compile": "tsc -p ./",
-								"watch": "tsc -watch -p ./",
-								"pretest": "yarn run compile",
-								"test": "node ./out/test/runTest.js",
-								"antlr4ts": "antlr4ts -visitor -Xexact-output-dir grammars/Bos.g4 -o src/parser"
-				},
-				"devDependencies": {
-								"@types/glob": "^7.1.1",
-								"@types/mocha": "^5.2.6",
-								"@types/node": "^10.12.21",
-								"@types/vscode": "^1.36.0",
-								"antlr4ts-cli": "^0.5.0-alpha.3",
-								"glob": "^7.1.4",
-								"mocha": "^6.1.4",
-								"tslint": "^5.12.1",
-								"typescript": "^3.3.1",
-								"vscode-test": "^1.0.2"
-				},
-				"dependencies": {
-								"antlr4": "^4.7.2",
-								"antlr4ts": "^0.5.0-alpha.3"
-				}
+    "name": "vscode-bos",
+    "displayName": "vscode-bos",
+    "description": "Simple extension for bos code suport",
+    "version": "0.0.1-rc",
+    "engines": {
+        "vscode": "^1.36.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "activationEvents": [
+        "onLanguage:bos",
+        "onCommand:extension.helloWorld"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "configuration": {
+            "title": "Bos Configuration",
+            "properties": {
+                "maxProblems": {
+                    "scope": "resource",
+                    "type": "number",
+                    "default": 10,
+                    "description": "Controls maximum number of problems produced by server"
+                }
+            }
+        },
+        "commands": [
+            {
+                "command": "extension.helloWorld",
+                "title": "Hello World"
+            }
+        ],
+        "languages": [
+            {
+                "id": "bos",
+                "aliases": [
+                    "bos",
+                    "BOS"
+                ],
+                "extensions": [
+                    ".bos"
+                ],
+                "configuration": "./language-configuration.json"
+            },
+            {
+                "id": "ddef",
+                "aliases": [
+                    "ddef",
+                    "DDef"
+                ],
+                "extensions": [
+                    ".ddef"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "bos",
+                "scopeName": "source.bos",
+                "path": "./syntaxes/bos.tmLanguage.json"
+            },
+            {
+                "language": "ddef",
+                "scopeName": "source.ddef",
+                "path": "./syntaxes/ddef.tmLanguage.json",
+                "embeddedLanguages": {
+                    "meta.embedded.block.sql": "sql"
+                }
+            }
+        ],
+        "snippets": [
+            {
+                "language": "bos",
+                "path": "./snippets/bos.json"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "yarn run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "yarn run compile",
+        "test": "node ./out/test/runTest.js",
+        "antlr4ts": "antlr4ts -visitor -Xexact-output-dir grammars/Bos.g4 -o src/parser"
+    },
+    "devDependencies": {
+        "@types/glob": "^7.1.1",
+        "@types/mocha": "^5.2.6",
+        "@types/node": "^10.12.21",
+        "@types/vscode": "^1.36.0",
+        "antlr4ts-cli": "^0.5.0-alpha.3",
+        "glob": "^7.1.4",
+        "mocha": "^6.1.4",
+        "tslint": "^5.12.1",
+        "typescript": "^3.3.1",
+        "vscode-test": "^1.0.2"
+    },
+    "dependencies": {
+        "antlr4": "^4.7.2",
+        "antlr4ts": "^0.5.0-alpha.3"
+    }
 }

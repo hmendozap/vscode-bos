@@ -1,0 +1,97 @@
+{
+    "For Loop": {
+        "prefix": "For",
+        "body": [
+          "For ${2:Element} To ${1:Array}",
+          "\t$0",
+          "Next"
+        ],
+        "description": "For Loop"
+    },
+    "Foreach Loop": {
+        "prefix": "Foreach",
+        "body": [
+          "Foreach ${2:Element} In ${1:Array} ",
+          "\t$0",
+          "Next"
+        ],
+        "description": "Foreach Loop"
+    },
+    "Sub Declaration": {
+        "prefix": "Sub",
+        "body":[
+            "Sub ${1:subName}()",
+            "\t$0",
+            "End Sub"
+        ],
+        "description": "Sub Method declaration"
+    },
+    "Function Declaration": {
+        "prefix": "Fn",
+        "body":[
+            "Function ${1:FunName}() As ${2:Boolean}",
+            "\t$0",
+            "End Function"
+        ],
+        "description": "Function Method declaration"
+    },
+    "Class Declaration" : {
+        "prefix": "Class",
+        "body":[
+            "Class ${1:ClassName} ${2:Extends ${3:Boolean}}",
+            "\t$0",
+            "End Class"
+        ],
+        "description": "Sub Method declaration"
+    },
+    "Simple AddIn Service": {
+        "prefix": "Service",
+        "body":[
+            "Class ${1:ClassName} Extends SimpleAddInService",
+            "\tDim vql As VQLStatement",
+            "",
+            "\tSub InitCommands()",
+            "\t\tDim cmd As Command",
+            "\t\tcmd = New Command(\"FunctionCommand1\", False)",
+            "\t\tcmd.UpdateCommand.Add(FunctionCommand1_Update)",
+            "\t\tcmd.ExecuteCommand.Add(FunctionCommand1)",
+            "\t\tCommands.Add(cmd)",
+            "\tEnd Sub",
+            "",
+            "End Class"
+        ],
+        "description": "Declaration of a SimpleAddInService"
+    },
+    "Add Document to DMS": {
+        "prefix": "Add2DMS",
+        "body": [
+            "Sub ${1:MethodName}(filePath As String)",
+                "\tDim archive As Archive = New Archive()",
+                "\tDim dap As DocumentAddParams = New DocumentAddParams()",
+                "\tdap.UploadFile = filePath",
+                "\tdap.DocuTypeName = \"${2:DocumentType}\"",
+                "\tdap.DocuDesc = \"${3:DocumentDescription}\"",
+                "\tdap.DocuName = Path.GetFileNameWithoutExtension(filePath)      ",
+                "\tdap.AddPropFieldValue(\"${4:PropertyField}\", ${5:PropertyFieldValue})",
+                "\tarchive.AddDocument(dap, False) ",
+                "\tarchive = Null",
+            "End Sub"
+        ],
+        "description": "Method to use the DMS to add a file located in file path"
+    },
+    "Get Document from DMS": {
+        "prefix": "Get4DMS",
+        "body": [
+            "Dim archive As Archive = New Archive()",
+            "Dim documentDict as DocuKeyPair[] = Archive.FindDocuments(${1:docType}, ${2:filter})",
+            "Dim documentPair as DocuKeyPair",
+            "Foreach documentPair In documentDict",
+            "\tarchive.LoadDocument(documentPair.DocuNo, documentPair.DocuVersion)",
+            "\tDim fileToAttach As String = archive.DownloadCurrentDocument()",
+            "Next"
+        ],
+        "description": "Method to use the DMS to add a file located in file path"
+
+    }
+
+}
