@@ -4,20 +4,23 @@
 import {window, commands, Disposable, ExtensionContext, StatusBarAlignment,
     StatusBarItem, TextDocument, languages } from 'vscode';
 import { ProgressIndicator } from './frontend/progress';
-import { SymbolResolver, BosSymbolProvider } from './backend/SymbolProvider';
+import { BosSymbolProvider } from './backend/SymbolProvider';
 import { ContextSensitivityInfo } from 'antlr4ts/atn/ContextSensitivityInfo';
+import { BosFacade } from './backend/BosFacade';
 
 const BOS = { language: 'bos', scheme: 'file'};
 
 let progress: ProgressIndicator;
-let symbolResolver: BosSymbolProvider;
+let backend: BosFacade;
+let symbolProvider: BosSymbolProvider;
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: ExtensionContext) {
     console.log('Congratulations, your extension "vscode-bos" is now active!');
 
     progress = new ProgressIndicator();
-    symbolResolver = new BosSymbolProvider();
+    backend = new BosFacade("");
+    symbolProvider = new BosSymbolProvider(backend);
 
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
@@ -32,7 +35,7 @@ export function activate(context: ExtensionContext) {
     // context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider())
 
     context.subscriptions.push(languages.registerDocumentSymbolProvider(BOS,
-        symbolResolver));
+        symbolProvider));
     context.subscriptions.push(disposable);
 }
 
