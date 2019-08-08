@@ -8,7 +8,7 @@
 
 import { CharStreams, CommonTokenStream, Token, RuleContext, ParserRuleContext } from "antlr4ts";
 
-import { BosParser, FunctionStmtContext, SubStmtContext, AmbiguousIdentifierContext  } from "../parser/BosParser";
+import { BosParser, FunctionStmtContext, SubStmtContext, AmbiguousIdentifierContext, ClassStmtContext  } from "../parser/BosParser";
 
 import { BufferController } from "./BufferController";
 
@@ -22,8 +22,17 @@ class BosExtensionListener implements BosListener {
     _source: string = "";
     public documentSymbols: SymbolInformation[] = [];
 
-    constructor(source: string){
+    constructor(source: string) {
         this._source = source;
+    }
+
+    enterClassStmt(context: ClassStmtContext) {
+        let name = context.ambiguousIdentifier().text;
+        let range = new Range(context.start.line - 1, context.start.charPositionInLine, context.stop!.line - 1, context.stop!.charPositionInLine);
+
+        let location = new Location(Uri.file(this._source), range);
+        let info = new SymbolInformation(name, SymbolKind.Class, "", location);
+        this.documentSymbols.push(info);
     }
 
     exitFunctionStmt(context: FunctionStmtContext) {
