@@ -2,7 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 // import * as vscode from 'vscode';
 import {window, commands, Disposable, ExtensionContext, StatusBarAlignment,
-    StatusBarItem, TextDocument, languages } from 'vscode';
+    StatusBarItem, TextDocument, languages, workspace } from 'vscode';
 import { ProgressIndicator } from './frontend/progress';
 import { BosSymbolProvider } from './backend/SymbolProvider';
 import { ContextSensitivityInfo } from 'antlr4ts/atn/ContextSensitivityInfo';
@@ -36,7 +36,20 @@ export function activate(context: ExtensionContext) {
 
     context.subscriptions.push(languages.registerDocumentSymbolProvider(BOS,
         symbolProvider));
+    // context.subscriptions.push();
     context.subscriptions.push(disposable);
+
+    // Events 
+    workspace.onDidSaveTextDocument((document: TextDocument) => {
+        if (document.languageId === 'bos' && document.uri.scheme === 'file') {
+            progress.startAnimation();
+            let documentName = document.fileName;
+            backend.setTextInBuffer(documentName, document.getText());
+            progress.stopAnimation();
+
+        }
+
+    });
 }
 
 // this method is called when your extension is deactivated
