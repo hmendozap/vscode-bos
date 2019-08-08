@@ -8,7 +8,7 @@
 
 import { CharStreams, CommonTokenStream, Token, RuleContext, ParserRuleContext } from "antlr4ts";
 
-import { BosParser, FunctionStmtContext, SubStmtContext, AmbiguousIdentifierContext, ClassStmtContext  } from "../parser/BosParser";
+import { BosParser, FunctionStmtContext, SubStmtContext, AmbiguousIdentifierContext, ClassStmtContext, VariableStmtContext, VariableSubStmtContext  } from "../parser/BosParser";
 
 import { BufferController } from "./BufferController";
 
@@ -36,21 +36,27 @@ class BosExtensionListener implements BosListener {
     }
 
     exitFunctionStmt(context: FunctionStmtContext) {
-        console.log(`Function ${context.ambiguousIdentifier().text}`);
-        this.addDocumentSymbol(context.ambiguousIdentifier());
+        // console.log(`Function ${context.ambiguousIdentifier().text}`);
+        let name = context.ambiguousIdentifier().text;
+        this.addDocumentSymbol(name, context.start, context.stop!, SymbolKind.Function);
     }
 
     enterSubStmt(context: SubStmtContext) {
-        console.log(`Sub ${context.ambiguousIdentifier().text}`);
-        this.addDocumentSymbol(context.ambiguousIdentifier());
+        // console.log(`Sub ${context.ambiguousIdentifier().text}`);
+        let name = context.ambiguousIdentifier().text;
+        this.addDocumentSymbol(name, context.start, context.stop!, SymbolKind.Function);
     }
 
-    addDocumentSymbol(context: AmbiguousIdentifierContext) {
-        let name = context.text;
-        let range = new Range(context.start.line - 1, context.start.charPositionInLine, context.stop!.line - 1, context.stop!.charPositionInLine);
+    enterVariableSubStmt(context: VariableSubStmtContext) {
+        let name = context.ambiguousIdentifier().text;
+        this.addDocumentSymbol(name, context.start, context.stop!, SymbolKind.Object);
+    }
+
+    private addDocumentSymbol(name : string, startToken : Token, stopToken: Token, kind: SymbolKind, description?: string) {
+        let range = new Range(startToken.line - 1, startToken.charPositionInLine, stopToken.line - 1, stopToken.charPositionInLine);
 
         let location = new Location(Uri.file(this._source), range);
-        let info = new SymbolInformation(name, SymbolKind.Function, "", location);
+        let info = new SymbolInformation(name, kind, description!, location);
         this.documentSymbols.push(info);
     }
 }
