@@ -6,6 +6,16 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"type": "antlr-debug",
+			"request": "launch",
+			"name": "Debug Current Grammar",
+			"grammar": "grammars/Bos.g4",
+			"input": "src/test/input.bos",
+			"startRule": "startRule",
+			"printParseTree": true,
+			"visualParseTree": true
+		},
+		{
 			"name": "Run Extension",
 			"type": "extensionHost",
 			"request": "launch",
