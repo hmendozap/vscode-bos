@@ -63,3 +63,11 @@ Added features X, Y, and Z.
 * [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
 
 **Enjoy!**
+
+## TODO
+
+[] Reparse the file after update
+[] Add version to grammar
+[] Debug grammar UsDataUtils
+[] Improve buffer controller (Review when are the buffer synced)
+[]
