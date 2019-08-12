@@ -13,7 +13,6 @@
 *
 * The grammar is derived from the Visual Basic 6.0 ANTLR Grammar & language
 * reference http://msdn.microsoft.com/en-us/library/aa338033%28v=vs.60%29.aspx
-* and .
 */
 
 grammar Bos;
@@ -28,7 +27,7 @@ startRule
 
 // Update module imports location
 module
-   : WS? NEWLINE* (moduleHeader NEWLINE +)? moduleReferences? NEWLINE* moduleImports? NEWLINE* controlProperties? NEWLINE* moduleConfig? NEWLINE* moduleAttributes? NEWLINE* moduleOptions? NEWLINE* moduleBody? NEWLINE*  WS?
+   : WS? NEWLINE* (moduleVersion)? (moduleHeader NEWLINE +)? moduleReferences? NEWLINE* moduleImports? NEWLINE* controlProperties? NEWLINE* moduleConfig? NEWLINE* moduleAttributes? NEWLINE* moduleOptions? NEWLINE* moduleBody? NEWLINE*  WS?
    ;
 
 moduleReferences
@@ -51,8 +50,14 @@ moduleReferenceComponent
    : STRINGLITERAL
    ;
 
+
 moduleHeader
    : VERSION WS DOUBLELITERAL (WS CLASS)?
+   ;
+
+// TODO: chnage this to parse the version number if its false and 0
+moduleVersion
+   : MACRO_VERSION WS+ STRINGLITERAL WS+ FALSE WS INTEGERLITERAL WS? NEWLINE+ // BYTE_ORDER_MARK
    ;
 
 moduleConfig
@@ -119,6 +124,7 @@ classBodyElement
 controlProperties
     : WS? BEGIN WS cp_ControlType WS cp_ControlIdentifier WS? NEWLINE+ cp_Properties+ END NEWLINE*
     ;
+
 
 cp_Properties
     : cp_SingleProperty
@@ -464,6 +470,7 @@ printStmt
    : PRINT WS valueStmt WS? COMMA (WS? outputList)?
    ;
 
+// TODO: Change this stmt
 propertyGetStmt
    : (visibility WS)? (STATIC WS)? PROPERTY_GET WS ambiguousIdentifier typeHint? (WS? argList)? (WS asTypeClause)? NEWLINE + (block NEWLINE +)? END_PROPERTY
    ;
@@ -1494,6 +1501,9 @@ LSET
    : L S E T
    ;
 
+MACRO_VERSION
+   : HASH V E R S I O N
+   ;
 
 MACRO_IF
    : HASH I F

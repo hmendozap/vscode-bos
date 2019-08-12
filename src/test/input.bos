@@ -1,3 +1,6 @@
+#Version "43277.0005" False 0
+﻿
+Import System.IO
 Import System.Collections
 Import System.ComponentModel
 
@@ -9,37 +12,6 @@ Import SBW.Windows.Controls
 
 
 Class TestSnippets
-// Comment on Class
-
-   Public Sub TestSnippets()
-      //Dim _var As Object
-      //_var = 4
-      //_var = (_var As Int32) Or 3
-      //Console.Write("Pause")
-      If Value1() And Value2() Then
-         Console.Write("Enter")
-      End If
-   End Sub
-
-    Function Testing() As Boolean
-      Dim TriggerDefinition As Int32 = 245
-    End Function
-
-    Function Value1() As String
-       //System.Diagnostics.Debug.WriteLine("Accessed Fun1")
-       Dim X As Object = New Object()
-       Return 1
-    End Function
-
-    Function Value2() As Boolean
-      System.Diagnostics.Debug.WriteLine("Accessed Fun2")
-      //Dim X As Object = New Object()
-      Return True
-    End Function
-
-    Static Function SiempreDispuestaParaLaMision() As RpRowSet
-    End Function
-
     Sub Main()
     End Sub
 
