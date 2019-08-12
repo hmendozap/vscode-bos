@@ -70,4 +70,9 @@ Added features X, Y, and Z.
 [] Add version to grammar
 [] Debug grammar UsDataUtils
 [] Improve buffer controller (Review when are the buffer synced)
-[]
+[] Add command to whether know if the file can be compiled ? (Blocking from version grammar)
+[] Change symbol information to document symbol and add hierarchy (Low Priority)
+[] Addd the Property Statemnent ( The one used in BOS)
+[] Ability to send complied `BOS` dlls to tests
+[] Modify `iCS_S_ProcedureOrArrayCall` rule, to accommodate the `[]` used for the arrays ( This should not be used for the transpilation, as they are to be overwritten (I think))
+
