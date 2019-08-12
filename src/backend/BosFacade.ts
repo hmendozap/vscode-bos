@@ -28,11 +28,7 @@ class BosExtensionListener implements BosListener {
 
     enterClassStmt(context: ClassStmtContext) {
         let name = context.ambiguousIdentifier().text;
-        let range = new Range(context.start.line - 1, context.start.charPositionInLine, context.stop!.line - 1, context.stop!.charPositionInLine);
-
-        let location = new Location(Uri.file(this._source), range);
-        let info = new SymbolInformation(name, SymbolKind.Class, "", location);
-        this.documentSymbols.push(info);
+        this.addDocumentSymbol(name, context.start, context.stop!, SymbolKind.Class);
     }
 
     exitFunctionStmt(context: FunctionStmtContext) {
@@ -49,7 +45,7 @@ class BosExtensionListener implements BosListener {
 
     enterVariableSubStmt(context: VariableSubStmtContext) {
         let name = context.ambiguousIdentifier().text;
-        this.addDocumentSymbol(name, context.start, context.stop!, SymbolKind.Object);
+        this.addDocumentSymbol(name, context.start, context.stop!, SymbolKind.Variable);
     }
 
     private addDocumentSymbol(name : string, startToken : Token, stopToken: Token, kind: SymbolKind, description?: string) {
@@ -100,7 +96,6 @@ export class SymbolResolver {
 
 export class BosFacade {
     // Mapping file names to buffer Mgr instances.
-    // TODO: Change this dict to an interface/class
     private bufferMgr: BufferController = new BufferController();
     // private resolver: SymbolResolver;
 

@@ -29,7 +29,7 @@ export class ProgressIndicator {
         this.statusBarItem.show();
         this.timer = setInterval(() => {
             let index = this.progress % ProgressIndicator.progressChars.length;
-            this.statusBarItem.text = "bos" + ProgressIndicator.progressChars.charAt(index);
+            this.statusBarItem.text = "Processing bos" + ProgressIndicator.progressChars.charAt(index);
             this.progress++;
         }, 50);
     }

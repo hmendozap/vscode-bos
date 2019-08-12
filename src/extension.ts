@@ -2,7 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 // import * as vscode from 'vscode';
 import {window, commands, Disposable, ExtensionContext, StatusBarAlignment,
-    StatusBarItem, TextDocument, languages, workspace } from 'vscode';
+    StatusBarItem, TextDocument, languages, workspace, TextDocumentChangeEvent } from 'vscode';
 import { ProgressIndicator } from './frontend/progress';
 import { BosSymbolProvider } from './backend/SymbolProvider';
 import { ContextSensitivityInfo } from 'antlr4ts/atn/ContextSensitivityInfo';
@@ -40,13 +40,22 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(disposable);
 
     // Events 
+    workspace.onDidChangeTextDocument((event: TextDocumentChangeEvent) => {
+        if (event.contentChanges.length > 0 && event.document.languageId === 'bos' && event.document.uri.scheme === 'file') {
+            let documentName = event.document.fileName;
+            backend.setTextInBuffer(documentName, event.document.getText());
+        }
+
+    });
     workspace.onDidSaveTextDocument((document: TextDocument) => {
         if (document.languageId === 'bos' && document.uri.scheme === 'file') {
+            console.log('Im starting animation');
             progress.startAnimation();
-            let documentName = document.fileName;
-            backend.setTextInBuffer(documentName, document.getText());
-            progress.stopAnimation();
-
+            setTimeout(()=> {
+                progress.stopAnimation();
+                console.log('Stop from animation');
+            }, 5000);
+            console.log('Im next from animation');
         }
 
     });
