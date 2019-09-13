@@ -66,13 +66,14 @@ Added features X, Y, and Z.
 
 ## TODO
 
-[] Reparse the file after update
-[] Add version to grammar
+[ X ] Reparse the file after update
+[ X ] Add version to grammar
+[] Add `Try-Catch` to grammar
 [] Debug grammar UsDataUtils
 [] Improve buffer controller (Review when are the buffer synced)
 [] Add command to whether know if the file can be compiled ? (Blocking from version grammar)
 [] Change symbol information to document symbol and add hierarchy (Low Priority)
-[] Addd the Property Statemnent ( The one used in BOS)
+[] Add the Property Statement ( The one used in BOS)
 [] Ability to send complied `BOS` dlls to tests
 [] Modify `iCS_S_ProcedureOrArrayCall` rule, to accommodate the `[]` used for the arrays ( This should not be used for the transpilation, as they are to be overwritten (I think))
 

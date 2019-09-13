@@ -651,7 +651,7 @@
             },
             "end": "\\b((End\\s(Sub|Function|If|Try|Using)$)|(Else))\\b",
             "endCaptures": {
-                "1": { "name": "keyword.control.end.bos" }
+                "1": { "name": "keyword.other.end.bos" }
             },
             "patterns": [{
                     "include": "#statement"
@@ -1036,7 +1036,7 @@
             "beginCaptures": {
                 "1": { "name": "keyword.other.dim.bos" },
                 "2": { "name": "entity.name.variable.local.bos" },
-                "3": { "name" : "keyword.other.as.bos"},
+                "3": { "name" : "keyword.operator.as.bos"},
                 "4": { "patterns": [ { "include": "#type" } ] },
                 "8": { "name": "keyword.other.var.bos" },
                 "9": { "name": "entity.name.variable.local.bos" }
@@ -1383,7 +1383,7 @@
             "begin": "(?x)\n(New)\\s+\n(?<type-name>\n  (?:\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name-and-type-args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type-args>\\s*<(?:[^<>]|\\g<type-args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name-and-type-args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*\\?\\s*)? # nullable suffix?\n    (?:\\s*\\[(?:\\s*,\\s*)*\\]\\s*)* # array suffix?\n  )\n)\\s*\n(?=\\()",
             "beginCaptures": {
                 "1": {
-                    "name": "keyword.other.new.bos"
+                    "name": "keyword.operator.new.bos"
                 },
                 "2": {
                     "patterns": [

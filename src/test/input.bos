@@ -12,7 +12,11 @@ Import SBW.Windows.Controls
 
 
 Class TestSnippets
+
     Sub Main()
+        Foreach fil In Files
+            subChilds.Insert(i, tempRows[i])
+        Next
     End Sub
 
 End Class

@@ -55,9 +55,10 @@ moduleHeader
    : VERSION WS DOUBLELITERAL (WS CLASS)?
    ;
 
-// TODO: chnage this to parse the version number if its false and 0
+// TODO: change this to parse the version number if its false and 0
+// TODO: create a rule for string literal to handle the version
 moduleVersion
-   : MACRO_VERSION WS+ STRINGLITERAL WS+ FALSE WS INTEGERLITERAL WS? NEWLINE+ // BYTE_ORDER_MARK
+   : MACRO_VERSION WS+ STRINGLITERAL WS+ FALSE WS INTEGERLITERAL WS? NEWLINE+  BYTE_ORDER_MARK
    ;
 
 moduleConfig
@@ -336,8 +337,12 @@ filecopyStmt
    ;
 
 forEachStmt
-   : FOR WS EACH WS ambiguousIdentifier typeHint? WS IN WS valueStmt NEWLINE + (block NEWLINE +)? NEXT (WS ambiguousIdentifier)?
+   : FOREACH WS ambiguousIdentifier WS IN WS valueStmt NEWLINE+ (block NEWLINE+)? NEXT
    ;
+
+// forEachStmt
+//    : FOR EACH WS ambiguousIdentifier typeHint? WS IN WS valueStmt NEWLINE + (block NEWLINE +)? NEXT (WS ambiguousIdentifier)?
+//    ;
 
 forNextStmt
    : FOR WS iCS_S_VariableOrProcedureCall typeHint? (WS asTypeClause)? WS? EQ WS? valueStmt WS TO WS valueStmt (WS STEP WS valueStmt)? NEWLINE + (block NEWLINE +)? NEXT (WS ambiguousIdentifier typeHint?)?
@@ -770,6 +775,7 @@ ambiguousIdentifier
    | L_SQUARE_BRACKET (IDENTIFIER | ambiguousKeyword) + R_SQUARE_BRACKET
    ;
 
+// field length is not used in BOS
 asTypeClause
    : AS WS (NEW WS)? type (WS fieldLength)?
    ;
@@ -846,7 +852,7 @@ publicPrivateGlobalVisibility
     ;
 
 type
-   : (baseType | complexType) (WS? LPAREN WS? RPAREN)?
+   : (baseType | complexType) (WS? L_SQUARE_BRACKET WS? R_SQUARE_BRACKET)?
    ;
 
 typeHint
@@ -1366,6 +1372,9 @@ FOR
    : F O R
    ;
 
+FOREACH
+   : F O R E A C H
+   ;
 
 FUNCTION
    : F U N C T I O N
@@ -2107,7 +2116,8 @@ GUID
     ;
 
 // identifier
-BYTE_ORDER_MARK: '\u00EF\u00BB\u00BF';
+// BYTE_ORDER_MARK: '\u00EF\u00BB\u00BF';
+BYTE_ORDER_MARK: '\uFEFF';
 
 IDENTIFIER
    : LETTER LETTERORDIGIT*
