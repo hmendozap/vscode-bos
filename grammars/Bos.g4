@@ -189,7 +189,6 @@ blockStmt
    | eraseStmt
    | errorStmt
    | exitStmt
-   | explicitCallStmt
    | filecopyStmt
    | forEachStmt
    | forNextStmt
@@ -207,7 +206,6 @@ blockStmt
    | lockStmt
    | lsetStmt
    | macroIfThenElseStmt
-   | midStmt
    | mkdirStmt
    | nameStmt
    | onErrorStmt
@@ -234,13 +232,11 @@ blockStmt
    | stopStmt
    | timeStmt
    | unloadStmt
-   | unlockStmt
    | variableStmt
    | whileWendStmt
    | widthStmt
    | withStmt
    | writeStmt
-   | implicitCallStmt_InBlock
    | implicitCallStmt_InStmt
    ;
 
@@ -433,9 +429,6 @@ macroElseBlockStmt
    : MACRO_ELSE NEWLINE + (moduleBody NEWLINE +)?
    ;
 
-midStmt
-   : MID WS? LPAREN WS? argsCall WS? RPAREN
-   ;
 
 mkdirStmt
    : MKDIR WS valueStmt
@@ -600,17 +593,15 @@ unloadStmt
    : UNLOAD WS valueStmt
    ;
 
-unlockStmt
-   : UNLOCK WS valueStmt (WS? COMMA WS? valueStmt (WS TO WS valueStmt)?)?
-   ;
 
 // operator precedence is represented by rule order
 valueStmt
    : literal                                                         # vsLiteral
+   | implicitCallStmt_InStmt                                         # vsICS
    | LPAREN WS? valueStmt (WS? COMMA WS? valueStmt)* WS? RPAREN      # vsStruct
    | NEW WS valueStmt                                                # vsNew
    | typeOfStmt                                                      # vsTypeOf
-   | ADDRESSOF WS valueStmt                                          # vsAddressOf
+   // | ADDRESSOF WS valueStmt                                          # vsAddressOf
    | implicitCallStmt_InStmt WS? ASSIGN WS? valueStmt                # vsAssign
    | valueStmt WS? POW WS? valueStmt                                 # vsPow
    | MINUS WS? valueStmt                                             # vsNegation
@@ -635,12 +626,10 @@ valueStmt
    | valueStmt WS? XOR WS? valueStmt                                 # vsXor
    | valueStmt WS? EQV WS? valueStmt                                 # vsEqv
    | valueStmt WS? IMP WS? valueStmt                                 # vsImp
-   | implicitCallStmt_InStmt                                         # vsICS
-   | midStmt                                                         # vsMid
    ;
 
 variableStmt
-   : (DIM | STATIC | visibility) WS (WITHEVENTS WS)? variableListStmt
+   : (DIM | STATIC | visibility) WS variableListStmt
    ;
 
 variableListStmt
@@ -669,10 +658,7 @@ writeStmt
 
 // complex call statements ----------------------------------
 
-explicitCallStmt
-   : eCS_ProcedureCall
-   | eCS_MemberProcedureCall
-   ;
+// Explicits call are not used in Bos
 
 // parantheses are required in case of args -> empty parantheses are removed
 eCS_ProcedureCall
@@ -685,8 +671,8 @@ eCS_MemberProcedureCall
    ;
 
 implicitCallStmt_InBlock
-   : iCS_B_ProcedureCall
-   | iCS_B_MemberProcedureCall
+   : iCS_B_MemberProcedureCall
+   | iCS_B_ProcedureCall
    ;
 
 // parantheses are forbidden in case of args
@@ -697,7 +683,8 @@ iCS_B_ProcedureCall
    ;
 
 iCS_B_MemberProcedureCall
-   : implicitCallStmt_InStmt? DOT ambiguousIdentifier typeHint? (WS argsCall)? dictionaryCallStmt?
+   // : implicitCallStmt_InStmt? DOT ambiguousIdentifier typeHint? (WS argsCall)?
+   : implicitCallStmt_InStmt? DOT ambiguousIdentifier typeHint? (WS argsCall)? (WS? LPAREN subscripts RPAREN)*
    ;
 
 // iCS_S_MembersCall first, so that member calls are not resolved as separate iCS_S_VariableOrProcedureCalls
@@ -712,9 +699,21 @@ iCS_S_VariableOrProcedureCall
    : ambiguousIdentifier typeHint? dictionaryCallStmt?
    ;
 
-iCS_S_ProcedureOrArrayCall
-   : (ambiguousIdentifier | baseType | iCS_S_NestedProcedureCall) typeHint? WS? (LPAREN WS? (argsCall WS?)? RPAREN)+ dictionaryCallStmt?
+iCS_S_ProcedureCall
+   : (ambiguousIdentifier | baseType | iCS_S_NestedProcedureCall) WS? (LPAREN WS? (argsCall WS?)? RPAREN)+
    ;
+
+iCS_S_ArrayCall
+   : ambiguousIdentifier WS? L_SQUARE_BRACKET WS? valueStmt WS? R_SQUARE_BRACKET
+   ;
+
+iCS_S_ProcedureOrArrayCall
+   : iCS_S_ProcedureCall
+   | iCS_S_ArrayCall
+   ;
+   // |
+   // : (ambiguousIdentifier | baseType | iCS_S_NestedProcedureCall) typeHint? WS? (LPAREN WS? (argsCall WS?)? RPAREN)+ dictionaryCallStmt?
+   // ;
 
 iCS_S_NestedProcedureCall
     : ambiguousIdentifier typeHint? WS? LPAREN WS? (argsCall WS?)? RPAREN
@@ -740,7 +739,7 @@ argsCall
    ;
 
 argCall
-   : ((BYVAL | BYREF | PARAMARRAY) WS)? valueStmt
+   : ((BYVAL | BYREF ) WS)? valueStmt
    ;
 
 dictionaryCallStmt
@@ -777,7 +776,7 @@ ambiguousIdentifier
 
 // field length is not used in BOS
 asTypeClause
-   : AS WS (NEW WS)? type (WS fieldLength)?
+   : AS WS (NEW WS)? type
    ;
 
 baseType

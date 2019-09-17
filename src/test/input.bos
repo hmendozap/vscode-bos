@@ -19,4 +19,19 @@ Class TestSnippets
         Next
     End Sub
 
+    Sub Initialize()
+        Database.HeaderExpand.Table.RowInserted.Add(HeaderExpand_Inserted)
+    End Sub
+
+    Sub HeaderExpand_Inserted(sender As Object, args As RowChangedEventArgs)
+        Dim hExRow As SalesQUHExpandRow = args.Row
+        hExRow.USOfferType = 2
+    End Sub
+
+    Sub Dispose()
+        Database.HeaderExpand.Table.RowInserted.Remove(HeaderExpand_Inserted)
+        Base.Dispose()
+    End Sub
+
+
 End Class
