@@ -74,6 +74,7 @@ classBody
    : classBodyElement (NEWLINE + classBodyElement)*
    ;
 
+
 classBodyElement
    : block
    | enumerationStmt
@@ -108,8 +109,6 @@ blockStmt
    | forNextStmt
    | getStmt
    | ifThenElseStmt
-   | implementsStmt
-   | inputStmt
    | letStmt
    | loadStmt
    | lockStmt
@@ -127,7 +126,11 @@ blockStmt
 // statements ----------------------------------
 
 classStmt
-   : (visibility WS)? CLASS WS ambiguousIdentifier NEWLINE + (classBody NEWLINE+)? END_CLASS
+   : (visibility WS)? CLASS WS (classBaseStmt NEWLINE +) (classBody NEWLINE+)? END_CLASS
+   ;
+
+classBaseStmt
+   : WS? ambiguousIdentifier WS (extendsStmt | implementsStmt) 
    ;
 
 constStmt
@@ -163,6 +166,10 @@ enumerationStmt_Constant
 
 eventStmt
    : (visibility WS)? EVENT WS ambiguousIdentifier WS? argList
+   ;
+
+extendsStmt
+   : EXTENDS WS complexType
    ;
 
 exitStmt
@@ -215,11 +222,7 @@ ifElseBlockStmt
    ;
 
 implementsStmt
-   : IMPLEMENTS WS ambiguousIdentifier
-   ;
-
-inputStmt
-   : INPUT WS valueStmt (WS? COMMA WS? valueStmt) +
+   : IMPLEMENTS WS complexType
    ;
 
 letStmt
@@ -801,6 +804,11 @@ EQV
 
 EVENT
    : E V E N T
+   ;
+
+
+EXTENDS
+   : E X T E N D S
    ;
 
 
