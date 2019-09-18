@@ -4,14 +4,7 @@ Import System.IO
 Import System.Collections
 Import System.ComponentModel
 
-Import SBW.Base
-Import SBW.Data
-Import SBW.DDef
-Import SBW.Foundation
-Import SBW.Windows.Controls
-
-
-Class TestSnippets
+Class TestSnippets Implements SBW.Tools.Probe.ProbeBase
 
     Sub Main()
         Foreach fil In Files
@@ -32,6 +25,12 @@ Class TestSnippets
         Database.HeaderExpand.Table.RowInserted.Remove(HeaderExpand_Inserted)
         Base.Dispose()
     End Sub
+
+   Function GetModuleName(app As String) As String
+      Dim result As String = app.Substring(app.LastIndexOf("\\") + 1)
+      result = result.Remove(result.LastIndexOf("."))
+      Return result
+   End Function
 
 
 End Class
