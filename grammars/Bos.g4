@@ -27,29 +27,12 @@ startRule
 
 // Update module imports location
 module
-   : WS? NEWLINE* (moduleVersion)? (moduleHeader NEWLINE +)? moduleReferences? NEWLINE* moduleImports? NEWLINE* controlProperties? NEWLINE* moduleConfig? NEWLINE* moduleAttributes? NEWLINE* moduleOptions? NEWLINE* moduleBody? NEWLINE*  WS?
-   ;
-
-moduleReferences
-   : moduleReference+
+   : WS? NEWLINE* (moduleVersion)? (moduleHeader NEWLINE +)? NEWLINE* moduleImports? NEWLINE* moduleConfig? NEWLINE* moduleBody? NEWLINE* WS?
    ;
 
 moduleImports
    : (importStmt NEWLINE+) +
    ;
-
-moduleReference
-   : OBJECT WS? EQ WS? moduleReferenceValue (SEMICOLON WS? moduleReferenceComponent)? NEWLINE*
-   ;
-
-moduleReferenceValue
-   : STRINGLITERAL
-   ;
-
-moduleReferenceComponent
-   : STRINGLITERAL
-   ;
-
 
 moduleHeader
    : VERSION WS DOUBLELITERAL (WS CLASS)?
@@ -69,21 +52,6 @@ moduleConfigElement
    : ambiguousIdentifier WS? EQ WS? literal NEWLINE
    ;
 
-moduleAttributes
-   : (attributeStmt NEWLINE +) +
-   ;
-
-moduleOptions
-   : (moduleOption NEWLINE +) +
-   ;
-
-moduleOption
-   : OPTION_BASE WS INTEGERLITERAL # optionBaseStmt
-   | OPTION_COMPARE WS (BINARY | TEXT) # optionCompareStmt
-   | OPTION_EXPLICIT # optionExplicitStmt
-   | OPTION_PRIVATE_MODULE # optionPrivateModuleStmt
-   ;
-
 moduleBody
    : moduleBodyElement (NEWLINE + moduleBodyElement)*
    ;
@@ -91,12 +59,9 @@ moduleBody
 moduleBodyElement
    : classStmt
    | moduleBlock
-   | moduleOption
-   | declareStmt
    | enumerationStmt
    | eventStmt
    | functionStmt
-   | macroIfThenElseStmt
    | propertyGetStmt
    | propertySetStmt
    | propertyLetStmt
@@ -111,7 +76,6 @@ classBody
 
 classBodyElement
    : block
-   | declareStmt
    | enumerationStmt
    | eventStmt
    | functionStmt
@@ -119,42 +83,6 @@ classBodyElement
    | propertySetStmt
    | subStmt
    ;
-
-// controls ----------------------------------
-
-controlProperties
-    : WS? BEGIN WS cp_ControlType WS cp_ControlIdentifier WS? NEWLINE+ cp_Properties+ END NEWLINE*
-    ;
-
-
-cp_Properties
-    : cp_SingleProperty
-    | cp_NestedProperty
-    | controlProperties;
-
-cp_SingleProperty
-    : WS? implicitCallStmt_InStmt WS? EQ WS? '$'? cp_PropertyValue FRX_OFFSET? NEWLINE+
-    ;
-
-cp_PropertyName
-    : (OBJECT DOT)? ambiguousIdentifier (LPAREN literal RPAREN)? (DOT ambiguousIdentifier (LPAREN literal RPAREN)?)*
-    ;
-
-cp_PropertyValue
-    : DOLLAR? (literal | (LBRACE ambiguousIdentifier RBRACE) | POW ambiguousIdentifier)
-    ;
-
-cp_NestedProperty
-    : WS? BEGINPROPERTY WS ambiguousIdentifier (LPAREN INTEGERLITERAL RPAREN)? (WS GUID)? NEWLINE+ (cp_Properties+)? ENDPROPERTY NEWLINE+
-    ;
-
-cp_ControlType
-    : complexType
-    ;
-
-cp_ControlIdentifier
-    : ambiguousIdentifier
-    ;
 
 // block ----------------------------------
 
@@ -166,104 +94,40 @@ importStmt
    : IMPORT WS type
    ;
 
-attributeStmt
-   : ATTRIBUTE WS implicitCallStmt_InStmt WS? EQ WS? literal (WS? COMMA WS? literal)*
-   ;
-
 block
    : blockStmt (NEWLINE + WS? blockStmt)*
    ;
 
 blockStmt
-   : appActivateStmt
-   | attributeStmt
-   | chDirStmt
-   | chDriveStmt
-   | closeStmt
-   | constStmt
+   : constStmt
    | dateStmt
-   | deleteSettingStmt
-   | deftypeStmt
    | doLoopStmt
    | endStmt
-   | eraseStmt
-   | errorStmt
    | exitStmt
-   | filecopyStmt
    | forEachStmt
    | forNextStmt
    | getStmt
-   | goSubStmt
-   | goToStmt
    | ifThenElseStmt
    | implementsStmt
    | inputStmt
-   | killStmt
    | letStmt
-   | lineInputStmt
-   | lineLabel
    | loadStmt
    | lockStmt
-   | lsetStmt
-   | macroIfThenElseStmt
-   | mkdirStmt
    | nameStmt
-   | onErrorStmt
-   | onGoToStmt
-   | onGoSubStmt
-   | openStmt
-   | printStmt
-   | putStmt
-   | raiseEventStmt
-   | randomizeStmt
-   | redimStmt
-   | resetStmt
-   | resumeStmt
    | returnStmt
-   | rmdirStmt
-   | rsetStmt
-   | savepictureStmt
-   | saveSettingStmt
-   | seekStmt
    | selectCaseStmt
-   | sendkeysStmt
-   | setattrStmt
    | setStmt
-   | stopStmt
    | timeStmt
    | unloadStmt
    | variableStmt
-   | whileWendStmt
-   | widthStmt
    | withStmt
-   | writeStmt
    | implicitCallStmt_InStmt
    ;
 
 // statements ----------------------------------
 
-appActivateStmt
-   : APPACTIVATE WS valueStmt (WS? COMMA WS? valueStmt)?
-   ;
-
-beepStmt
-   : BEEP
-   ;
-
-chDirStmt
-   : CHDIR WS valueStmt
-   ;
-
-chDriveStmt
-   : CHDRIVE WS valueStmt
-   ;
-
 classStmt
    : (visibility WS)? CLASS WS ambiguousIdentifier NEWLINE + (classBody NEWLINE+)? END_CLASS
-   ;
-
-closeStmt
-   : CLOSE (WS valueStmt (WS? COMMA WS? valueStmt)*)?
    ;
 
 constStmt
@@ -278,18 +142,7 @@ dateStmt
    : DATE WS? EQ WS? valueStmt
    ;
 
-declareStmt
-   : (visibility WS)? DECLARE WS (FUNCTION typeHint? | SUB) WS ambiguousIdentifier typeHint? WS LIB WS STRINGLITERAL (WS ALIAS WS STRINGLITERAL)? (WS? argList)? (WS asTypeClause)?
-   ;
-
-deftypeStmt
-   : (DEFBOOL | DEFBYTE | DEFINT | DEFLNG | DEFCUR | DEFSNG | DEFDBL | DEFDEC | DEFDATE | DEFSTR | DEFOBJ | DEFVAR) WS letterrange (WS? COMMA WS? letterrange)*
-   ;
-
-deleteSettingStmt
-   : DELETESETTING WS valueStmt WS? COMMA WS? valueStmt (WS? COMMA WS? valueStmt)?
-   ;
-
+// TODO: Add Do While (without the loop)
 doLoopStmt
    : DO NEWLINE + (block NEWLINE +)? LOOP
    | DO WS (WHILE | UNTIL) WS valueStmt NEWLINE + (block NEWLINE +)? LOOP
@@ -308,14 +161,6 @@ enumerationStmt_Constant
    : ambiguousIdentifier (WS? EQ WS? valueStmt)? NEWLINE +
    ;
 
-eraseStmt
-   : ERASE WS valueStmt (WS? COMMA WS? valueStmt)*
-   ;
-
-errorStmt
-   : ERROR WS valueStmt
-   ;
-
 eventStmt
    : (visibility WS)? EVENT WS ambiguousIdentifier WS? argList
    ;
@@ -326,10 +171,6 @@ exitStmt
    | EXIT_FUNCTION
    | EXIT_PROPERTY
    | EXIT_SUB
-   ;
-
-filecopyStmt
-   : FILECOPY WS valueStmt WS? COMMA WS? valueStmt
    ;
 
 forEachStmt
@@ -350,14 +191,6 @@ functionStmt
 
 getStmt
    : GET WS valueStmt WS? COMMA WS? valueStmt? WS? COMMA WS? valueStmt
-   ;
-
-goSubStmt
-   : GOSUB WS valueStmt
-   ;
-
-goToStmt
-   : GOTO WS valueStmt
    ;
 
 ifThenElseStmt
@@ -389,16 +222,8 @@ inputStmt
    : INPUT WS valueStmt (WS? COMMA WS? valueStmt) +
    ;
 
-killStmt
-   : KILL WS valueStmt
-   ;
-
 letStmt
-   : (LET WS)? implicitCallStmt_InStmt WS? (EQ | PLUS_EQ | MINUS_EQ) WS? valueStmt
-   ;
-
-lineInputStmt
-   : LINE_INPUT WS valueStmt WS? COMMA WS? valueStmt
+   : implicitCallStmt_InStmt WS? (EQ | PLUS_EQ | MINUS_EQ) WS? valueStmt
    ;
 
 loadStmt
@@ -409,63 +234,8 @@ lockStmt
    : LOCK WS valueStmt (WS? COMMA WS? valueStmt (WS TO WS valueStmt)?)?
    ;
 
-lsetStmt
-   : LSET WS implicitCallStmt_InStmt WS? EQ WS? valueStmt
-   ;
-
-macroIfThenElseStmt
-   : macroIfBlockStmt macroElseIfBlockStmt* macroElseBlockStmt? MACRO_END_IF
-   ;
-
-macroIfBlockStmt
-   : MACRO_IF WS ifConditionStmt WS THEN NEWLINE + (moduleBody NEWLINE +)?
-   ;
-
-macroElseIfBlockStmt
-   : MACRO_ELSEIF WS ifConditionStmt WS THEN NEWLINE + (moduleBody NEWLINE +)?
-   ;
-
-macroElseBlockStmt
-   : MACRO_ELSE NEWLINE + (moduleBody NEWLINE +)?
-   ;
-
-
-mkdirStmt
-   : MKDIR WS valueStmt
-   ;
-
 nameStmt
    : NAME WS valueStmt WS AS WS valueStmt
-   ;
-
-onErrorStmt
-   : (ON_ERROR | ON_LOCAL_ERROR) WS (GOTO WS valueStmt COLON? | RESUME WS NEXT)
-   ;
-
-onGoToStmt
-   : ON WS valueStmt WS GOTO WS valueStmt (WS? COMMA WS? valueStmt)*
-   ;
-
-onGoSubStmt
-   : ON WS valueStmt WS GOSUB WS valueStmt (WS? COMMA WS? valueStmt)*
-   ;
-
-openStmt
-   : OPEN WS valueStmt WS FOR WS (APPEND | BINARY | INPUT | OUTPUT | RANDOM) (WS ACCESS WS (READ | WRITE | READ_WRITE))? (WS (SHARED | LOCK_READ | LOCK_WRITE | LOCK_READ_WRITE))? WS AS WS valueStmt (WS LEN WS? EQ WS? valueStmt)?
-   ;
-
-outputList
-   : outputList_Expression (WS? (SEMICOLON | COMMA) WS? outputList_Expression?)*
-   | outputList_Expression? (WS? (SEMICOLON | COMMA) WS? outputList_Expression?) +
-   ;
-
-outputList_Expression
-   : (SPC | TAB) (WS? LPAREN WS? argsCall WS? RPAREN)?
-   | valueStmt
-   ;
-
-printStmt
-   : PRINT WS valueStmt WS? COMMA (WS? outputList)?
    ;
 
 // TODO: Change this stmt
@@ -481,56 +251,8 @@ propertyLetStmt
    : (visibility WS)? (STATIC WS)? PROPERTY_LET WS ambiguousIdentifier (WS? argList)? NEWLINE + (block NEWLINE +)? END_PROPERTY
    ;
 
-putStmt
-   : PUT WS valueStmt WS? COMMA WS? valueStmt? WS? COMMA WS? valueStmt
-   ;
-
-raiseEventStmt
-   : RAISEEVENT WS ambiguousIdentifier (WS? LPAREN WS? (argsCall WS?)? RPAREN)?
-   ;
-
-randomizeStmt
-   : RANDOMIZE (WS valueStmt)?
-   ;
-
-redimStmt
-   : REDIM WS (PRESERVE WS)? redimSubStmt (WS? COMMA WS? redimSubStmt)*
-   ;
-
-redimSubStmt
-   : implicitCallStmt_InStmt WS? LPAREN WS? subscripts WS? RPAREN (WS asTypeClause)?
-   ;
-
-resetStmt
-   : RESET
-   ;
-
-resumeStmt
-   : RESUME (WS (NEXT | ambiguousIdentifier))?
-   ;
-
 returnStmt
    : RETURN (WS valueStmt)?
-   ;
-
-rmdirStmt
-   : RMDIR WS valueStmt
-   ;
-
-rsetStmt
-   : RSET WS implicitCallStmt_InStmt WS? EQ WS? valueStmt
-   ;
-
-savepictureStmt
-   : SAVEPICTURE WS valueStmt WS? COMMA WS? valueStmt
-   ;
-
-saveSettingStmt
-   : SAVESETTING WS valueStmt WS? COMMA WS? valueStmt WS? COMMA WS? valueStmt WS? COMMA WS? valueStmt
-   ;
-
-seekStmt
-   : SEEK WS valueStmt WS? COMMA WS? valueStmt
    ;
 
 selectCaseStmt
@@ -553,20 +275,8 @@ sC_CondExpr
    | valueStmt WS TO WS valueStmt # caseCondExprTo
    ;
 
-sendkeysStmt
-   : SENDKEYS WS valueStmt (WS? COMMA WS? valueStmt)?
-   ;
-
-setattrStmt
-   : SETATTR WS valueStmt WS? COMMA WS? valueStmt
-   ;
-
 setStmt
    : SET WS implicitCallStmt_InStmt WS? EQ WS? valueStmt
-   ;
-
-stopStmt
-   : STOP
    ;
 
 subStmt
@@ -625,7 +335,6 @@ valueStmt
    | valueStmt WS? OR WS? valueStmt                                  # vsOr
    | valueStmt WS? XOR WS? valueStmt                                 # vsXor
    | valueStmt WS? EQV WS? valueStmt                                 # vsEqv
-   | valueStmt WS? IMP WS? valueStmt                                 # vsImp
    ;
 
 variableStmt
@@ -640,35 +349,13 @@ variableSubStmt
    : ambiguousIdentifier typeHint? (WS? LPAREN WS? (subscripts WS?)? RPAREN WS?)? (WS asTypeClause)? (WS? EQ WS? valueStmt)?
    ;
 
-whileWendStmt
-   : WHILE WS valueStmt NEWLINE + block* NEWLINE* WEND
-   ;
-
-widthStmt
-   : WIDTH WS valueStmt WS? COMMA WS? valueStmt
-   ;
-
 withStmt
    : WITH WS (NEW WS)? implicitCallStmt_InStmt NEWLINE + (block NEWLINE +)? END_WITH
-   ;
-
-writeStmt
-   : WRITE WS valueStmt WS? COMMA (WS? outputList)?
    ;
 
 // complex call statements ----------------------------------
 
 // Explicits call are not used in Bos
-
-// parantheses are required in case of args -> empty parantheses are removed
-eCS_ProcedureCall
-   : CALL WS ambiguousIdentifier typeHint? (WS? LPAREN WS? argsCall WS? RPAREN)?
-   ;
-
-// parantheses are required in case of args -> empty parantheses are removed
-eCS_MemberProcedureCall
-   : CALL WS implicitCallStmt_InStmt? DOT WS? ambiguousIdentifier typeHint? (WS? LPAREN WS? argsCall WS? RPAREN)?
-   ;
 
 implicitCallStmt_InBlock
    : iCS_B_MemberProcedureCall
@@ -738,8 +425,9 @@ argsCall
    : (argCall? WS? (COMMA | SEMICOLON) WS?)* argCall (WS? (COMMA | SEMICOLON) WS? argCall?)*
    ;
 
+//TODO: Clean the (WS)?
 argCall
-   : ((BYVAL | BYREF ) WS)? valueStmt
+   : WS? valueStmt
    ;
 
 dictionaryCallStmt
@@ -751,8 +439,9 @@ argList
    : LPAREN (WS? arg (WS? COMMA WS? arg)*)? WS? RPAREN
    ;
 
+//TODO: Clean the (WS)?
 arg
-   : (OPTIONAL WS)? ((BYVAL | BYREF) WS)? (PARAMARRAY WS)? ambiguousIdentifier typeHint? (WS? LPAREN WS? RPAREN)? (WS asTypeClause)? (WS? argDefaultValue)?
+   : (OPTIONAL WS)? (WS)? ambiguousIdentifier typeHint? (WS? LPAREN WS? RPAREN)? (WS asTypeClause)? (WS? argDefaultValue)?
    ;
 
 argDefaultValue
@@ -790,7 +479,6 @@ baseType
    | OBJECT
    | SINGLE
    | STRING
-   | VARIANT
    ;
 
 certainIdentifier
@@ -813,16 +501,8 @@ complexType
    : ambiguousIdentifier (DOT ambiguousIdentifier)*
    ;
 
-fieldLength
-   : MULT WS? (INTEGERLITERAL | ambiguousIdentifier)
-   ;
-
 letterrange
    : certainIdentifier (WS? MINUS WS? certainIdentifier)?
-   ;
-
-lineLabel
-   : ambiguousIdentifier COLON
    ;
 
 literal
@@ -872,44 +552,19 @@ visibility
 
 // ambiguous keywords
 ambiguousKeyword
-   : ACCESS
-   | ADDRESSOF
+   : ADDRESSOF
    | ALIAS
    | AND
-   | ATTRIBUTE
-   | APPACTIVATE
-   | APPEND
    | AS
-   | BEEP
    | BEGIN
    | BINARY
    | BOOLEAN
-   | BYVAL
-   | BYREF
    | BYTE
-   | CALL
    | CASE
    | CLASS
-   | CLOSE
-   | CHDIR
-   | CHDRIVE
    | COLLECTION
    | CONST
    | DATE
-   | DECLARE
-   | DEFBOOL
-   | DEFBYTE
-   | DEFCUR
-   | DEFDBL
-   | DEFDATE
-   | DEFDEC
-   | DEFINT
-   | DEFLNG
-   | DEFOBJ
-   | DEFSNG
-   | DEFSTR
-   | DEFVAR
-   | DELETESETTING
    | DIM
    | DO
    | DOUBLE
@@ -919,38 +574,25 @@ ambiguousKeyword
    | END
    | ENUM
    | EQV
-   | ERASE
-   | ERROR
    | EVENT
    | FALSE
-   | FILECOPY
    | FRIEND
    | FOR
    | FUNCTION
    | GET
    | GLOBAL
-   | GOSUB
-   | GOTO
    | IF
-   | IMP
    | IMPLEMENTS
    | IN
    | INPUT
    | IS
    | INTEGER
-   | KILL
    | LOAD
    | LOCK
    | LONG
    | LOOP
-   | LEN
-   | LET
-   | LIB
    | LIKE
-   | LSET
    | ME
-   | MID
-   | MKDIR
    | MOD
    | NAME
    | NEXT
@@ -960,44 +602,20 @@ ambiguousKeyword
    | NULL
    | OBJECT
    | ON
-   | OPEN
    | OPTIONAL
    | OR
    | OUTPUT
-   | PARAMARRAY
-   | PRESERVE
-   | PRINT
    | PRIVATE
    | PUBLIC
-   | PUT
-   | RANDOM
-   | RANDOMIZE
-   | RAISEEVENT
-   | READ
-   | REDIM
-   | REM
-   | RESET
-   | RESUME
    | RETURN
-   | RMDIR
-   | RSET
-   | SAVEPICTURE
-   | SAVESETTING
-   | SEEK
    | SELECT
-   | SENDKEYS
    | SET
-   | SETATTR
    | SHARED
    | SINGLE
-   | SPC
    | STATIC
    | STEP
-   | STOP
    | STRING
    | SUB
-   | TAB
-   | TEXT
    | THEN
    | TIME
    | TO
@@ -1005,27 +623,16 @@ ambiguousKeyword
    | TYPE
    | TYPEOF
    | UNLOAD
-   | UNLOCK
    | UNTIL
-   | VARIANT
    | VERSION
-   | WEND
    | WHILE
-   | WIDTH
    | WITH
-   | WITHEVENTS
-   | WRITE
    | XOR
    ;
 
 // lexer rules --------------------------------------------------------------------------------
 
 // keywords
-
-ACCESS
-   : A C C E S S
-   ;
-
 
 ADDRESSOF
    : A D D R E S S O F
@@ -1042,28 +649,8 @@ AND
    ;
 
 
-ATTRIBUTE
-   : A T T R I B U T E
-   ;
-
-
-APPACTIVATE
-   : A P P A C T I V A T E
-   ;
-
-
-APPEND
-   : A P P E N D
-   ;
-
-
 AS
    : A S
-   ;
-
-
-BEEP
-   : B E E P
    ;
 
 
@@ -1087,23 +674,8 @@ BOOLEAN
    ;
 
 
-BYVAL
-   : B Y V A L
-   ;
-
-
-BYREF
-   : B Y R E F
-   ;
-
-
 BYTE
    : B Y T E
-   ;
-
-
-CALL
-   : C A L L
    ;
 
 
@@ -1112,23 +684,8 @@ CASE
    ;
 
 
-CHDIR
-   : C H D I R
-   ;
-
-
-CHDRIVE
-   : C H D R I V E
-   ;
-
-
 CLASS
    : C L A S S
-   ;
-
-
-CLOSE
-   : C L O S E
    ;
 
 
@@ -1144,76 +701,6 @@ CONST
 
 DATE
    : D A T E
-   ;
-
-
-DECLARE
-   : D E C L A R E
-   ;
-
-
-DEFBOOL
-   : D E F B O O L
-   ;
-
-
-DEFBYTE
-   : D E F B Y T E
-   ;
-
-
-DEFDATE
-   : D E F D A T E
-   ;
-
-
-DEFDBL
-   : D E F D B L
-   ;
-
-
-DEFDEC
-   : D E F D E C
-   ;
-
-
-DEFCUR
-   : D E F C U R
-   ;
-
-
-DEFINT
-   : D E F I N T
-   ;
-
-
-DEFLNG
-   : D E F L N G
-   ;
-
-
-DEFOBJ
-   : D E F O B J
-   ;
-
-
-DEFSNG
-   : D E F S N G
-   ;
-
-
-DEFSTR
-   : D E F S T R
-   ;
-
-
-DEFVAR
-   : D E F V A R
-   ;
-
-
-DELETESETTING
-   : D E L E T E S E T T I N G
    ;
 
 
@@ -1312,16 +799,6 @@ EQV
    ;
 
 
-ERASE
-   : E R A S E
-   ;
-
-
-ERROR
-   : E R R O R
-   ;
-
-
 EVENT
    : E V E N T
    ;
@@ -1357,11 +834,6 @@ FALSE
    ;
 
 
-FILECOPY
-   : F I L E C O P Y
-   ;
-
-
 FRIEND
    : F R I E N D
    ;
@@ -1371,9 +843,11 @@ FOR
    : F O R
    ;
 
+
 FOREACH
    : F O R E A C H
    ;
+
 
 FUNCTION
    : F U N C T I O N
@@ -1390,23 +864,8 @@ GLOBAL
    ;
 
 
-GOSUB
-   : G O S U B
-   ;
-
-
-GOTO
-   : G O T O
-   ;
-
-
 IF
    : I F
-   ;
-
-
-IMP
-   : I M P
    ;
 
 
@@ -1440,11 +899,6 @@ INTEGER
    ;
 
 
-KILL
-   : K I L L
-   ;
-
-
 LOAD
    : L O A D
    ;
@@ -1465,86 +919,17 @@ LOOP
    ;
 
 
-LEN
-   : L E N
-   ;
-
-
-LET
-   : L E T
-   ;
-
-
-LIB
-   : L I B
-   ;
-
-
 LIKE
    : L I K E
    ;
 
 
-LINE_INPUT
-   : L I N E ' ' I N P U T
-   ;
-
-
-LOCK_READ
-   : L O C K ' ' R E A D
-   ;
-
-
-LOCK_WRITE
-   : L O C K ' ' W R I T E
-   ;
-
-
-LOCK_READ_WRITE
-   : L O C K ' ' R E A D ' ' W R I T E
-   ;
-
-
-LSET
-   : L S E T
-   ;
-
 MACRO_VERSION
    : HASH V E R S I O N
    ;
 
-MACRO_IF
-   : HASH I F
-   ;
-
-
-MACRO_ELSEIF
-   : HASH E L S E I F
-   ;
-
-
-MACRO_ELSE
-   : HASH E L S E
-   ;
-
-
-MACRO_END_IF
-   : HASH E N D ' ' I F
-   ;
-
-
 ME
    : M E
-   ;
-
-
-MID
-   : M I D
-   ;
-
-
-MKDIR
-   : M K D I R
    ;
 
 
@@ -1582,52 +967,19 @@ NULL
    : N U L L
    ;
 
+
 OBJECT
    : O B J E C T
    ;
+
 
 ON
    : O N
    ;
 
 
-ON_ERROR
-   : O N ' ' E R R O R
-   ;
-
-
-ON_LOCAL_ERROR
-   : O N ' ' L O C A L ' ' E R R O R
-   ;
-
-
-OPEN
-   : O P E N
-   ;
-
-
 OPTIONAL
    : O P T I O N A L
-   ;
-
-
-OPTION_BASE
-   : O P T I O N ' ' B A S E
-   ;
-
-
-OPTION_EXPLICIT
-   : O P T I O N ' ' E X P L I C I T
-   ;
-
-
-OPTION_COMPARE
-   : O P T I O N ' ' C O M P A R E
-   ;
-
-
-OPTION_PRIVATE_MODULE
-   : O P T I O N ' ' P R I V A T E ' ' M O D U L E
    ;
 
 
@@ -1638,21 +990,6 @@ OR
 
 OUTPUT
    : O U T P U T
-   ;
-
-
-PARAMARRAY
-   : P A R A M A R R A Y
-   ;
-
-
-PRESERVE
-   : P R E S E R V E
-   ;
-
-
-PRINT
-   : P R I N T
    ;
 
 
@@ -1681,83 +1018,8 @@ PUBLIC
    ;
 
 
-PUT
-   : P U T
-   ;
-
-
-RANDOM
-   : R A N D O M
-   ;
-
-
-RANDOMIZE
-   : R A N D O M I Z E
-   ;
-
-
-RAISEEVENT
-   : R A I S E E V E N T
-   ;
-
-
-READ
-   : R E A D
-   ;
-
-
-READ_WRITE
-   : R E A D ' ' W R I T E
-   ;
-
-
-REDIM
-   : R E D I M
-   ;
-
-
-REM
-   : R E M
-   ;
-
-
-RESET
-   : R E S E T
-   ;
-
-
-RESUME
-   : R E S U M E
-   ;
-
-
 RETURN
    : R E T U R N
-   ;
-
-
-RMDIR
-   : R M D I R
-   ;
-
-
-RSET
-   : R S E T
-   ;
-
-
-SAVEPICTURE
-   : S A V E P I C T U R E
-   ;
-
-
-SAVESETTING
-   : S A V E S E T T I N G
-   ;
-
-
-SEEK
-   : S E E K
    ;
 
 
@@ -1766,18 +1028,8 @@ SELECT
    ;
 
 
-SENDKEYS
-   : S E N D K E Y S
-   ;
-
-
 SET
    : S E T
-   ;
-
-
-SETATTR
-   : S E T A T T R
    ;
 
 
@@ -1791,11 +1043,6 @@ SINGLE
    ;
 
 
-SPC
-   : S P C
-   ;
-
-
 STATIC
    : S T A T I C
    ;
@@ -1806,11 +1053,6 @@ STEP
    ;
 
 
-STOP
-   : S T O P
-   ;
-
-
 STRING
    : S T R I N G
    ;
@@ -1818,16 +1060,6 @@ STRING
 
 SUB
    : S U B
-   ;
-
-
-TAB
-   : T A B
-   ;
-
-
-TEXT
-   : T E X T
    ;
 
 
@@ -1866,18 +1098,8 @@ UNLOAD
    ;
 
 
-UNLOCK
-   : U N L O C K
-   ;
-
-
 UNTIL
    : U N T I L
-   ;
-
-
-VARIANT
-   : V A R I A N T
    ;
 
 
@@ -1886,33 +1108,13 @@ VERSION
    ;
 
 
-WEND
-   : W E N D
-   ;
-
-
 WHILE
    : W H I L E
    ;
 
 
-WIDTH
-   : W I D T H
-   ;
-
-
 WITH
    : W I T H
-   ;
-
-
-WITHEVENTS
-   : W I T H E V E N T S
-   ;
-
-
-WRITE
-   : W R I T E
    ;
 
 
@@ -2115,7 +1317,6 @@ GUID
     ;
 
 // identifier
-// BYTE_ORDER_MARK: '\u00EF\u00BB\u00BF';
 BYTE_ORDER_MARK: '\uFEFF';
 
 IDENTIFIER
