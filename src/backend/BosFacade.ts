@@ -6,7 +6,7 @@
  * See LICENSE file for more info.
  */
 
-import { CharStreams, CommonTokenStream, Token, RuleContext, ParserRuleContext } from "antlr4ts";
+import { CharStreams, CommonTokenStream, Token, RuleContext, ParserRuleContext, DefaultErrorStrategy } from "antlr4ts";
 
 import { BosParser, FunctionStmtContext, SubStmtContext, AmbiguousIdentifierContext, ClassStmtContext, VariableStmtContext, VariableSubStmtContext  } from "../parser/BosParser";
 
@@ -17,6 +17,30 @@ import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 import { BosLexer } from "../parser/BosLexer";
 import { SymbolInformation, SymbolKind, Range, Location, DocumentSymbol, Uri, DocumentSymbolProvider, TextDocument, CancellationToken, ProviderResult, TaskScope } from "vscode";
 import { readFileSync } from "fs";
+import { BosErrorListener, BosLexerErrorListener } from "./BosErrorListener";
+
+/**
+ * A range within a text. Just like the range object in vscode the end position is not included in the range.
+ * Hence when start and end position are equal the range is empty.
+ */
+export class LexicalRange {
+    start!: { column: number, row: number };
+    end!: { column: number, row: number };
+}
+
+export enum DiagnosticType {
+    Hint,
+    Info,
+    Warning,
+    Error
+}
+
+export class DiagnosticEntry {
+    type!: DiagnosticType;
+    message!: string;
+    range!: LexicalRange;
+}
+
 
 class BosExtensionListener implements BosListener {
     _source: string = "";
@@ -61,8 +85,11 @@ class BosExtensionListener implements BosListener {
 
 export class SymbolResolver {
     public symbolTable : SymbolInformation[] = [];
+    public diagnostics: DiagnosticEntry[] = [];
     private _source: string;
     private _tokenStream!: CommonTokenStream;
+    private _lexerErrorListener: BosLexerErrorListener = new BosLexerErrorListener(this.diagnostics);
+    private _parserErrorListener: BosErrorListener = new BosErrorListener(this.diagnostics);
 
     /**
      *
@@ -76,14 +103,19 @@ export class SymbolResolver {
          let input = CharStreams.fromString(this._source);
         // let inputStream = new ANTLRInputStream(bosFile);
         let lexer = new BosLexer(input);
-        // let tokenStream = new CommonTokenStream(lexer);
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(this._lexerErrorListener);
         this._tokenStream = new CommonTokenStream(lexer);
     }
 
     public parseFile(documentUri: string)
     {
         let parser = new BosParser(this._tokenStream);
+        parser.removeErrorListeners();
         // TODO: Remember to add custom error listener.
+        parser.addErrorListener(this._parserErrorListener);
+        parser.errorHandler = new DefaultErrorStrategy();
+
         let tree = parser.startRule();
 
         const listener: BosExtensionListener = new BosExtensionListener(documentUri);
