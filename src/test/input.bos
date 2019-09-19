@@ -26,11 +26,32 @@ Class TestSnippets Implements SBW.Tools.Probe.ProbeBase
         Base.Dispose()
     End Sub
 
-   Function GetModuleName(app As String) As String
-      Dim result As String = app.Substring(app.LastIndexOf("\\") + 1)
-      result = result.Remove(result.LastIndexOf("."))
-      Return result
-   End Function
+    Function GetModuleName(app As String) As String
+        Dim result As String = app.Substring(app.LastIndexOf("\\") + 1)
+        result = result.Remove(result.LastIndexOf("."))
+        Return result
+    End Function
 
+    Function GetPrimaryKeyColumn(table As RpTable) As RpColumn
+        If table <> Null Then
+            If table.PrimaryKey <> Null Then
+                If table.PrimaryKey.Columns.Length = 1 And table.PrimaryKey.Columns[0].PropertyType = Typeof(String) Then
+                    Return table.PrimaryKey.Columns[0]
+                End  If
+            End If
+            Dim key As RpKey
+            Foreach key In table.Keys
+                If key.Unique And key.Columns.Length = 1 Then
+                    If key.Columns[0].PropertyType = Typeof(String) Then
+                        Return key.Columns[0]
+                    End If
+                End If
+            Next
+        End If
+        Return Null
+    End Function
+
+    Static Function NewOne ()
+    End Function
 
 End Class

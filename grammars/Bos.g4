@@ -753,7 +753,7 @@ END_FUNCTION
 
 
 END_IF
-   : E N D ' ' I F
+   : E N D WS+ I F
    ;
 
 
